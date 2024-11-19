@@ -9,8 +9,32 @@ void    handle_sigint(int signum)
     rl_redisplay();   
 }
 
-void    handle_sigint_in_heredoc(int signum)
+void    handle_eof(t_data data)
+{
+    if(data.input == NULL)
+    {
+        printf("exit\n");
+        exit(EXIT_SUCCESS);
+    }
+}
+
+void    handle_sigint_child_process(int signum)
 {
     (void)signum;
+    received_signal = 1;
     printf("\n");
+}
+
+void disable_echo_ctrl()
+{
+    struct termios term;
+
+    if (tcgetattr(STDIN_FILENO, &term) == -1)
+    {
+        perror("tcgetattr");
+        return;
+    }
+    term.c_lflag &= ~ECHOCTL;
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+        perror("tcsetattr");
 }

@@ -1,9 +1,11 @@
 # Ignore compiled files
 *.o
-*.out
+.out
+minishell
+libft.a
 
 # Ignore files and directories
-/notes/
+shell_notes
 to_do_list
 
 # Visual Studio Code:

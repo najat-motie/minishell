@@ -160,7 +160,7 @@ void    excute_cmnds(t_data *data)
     int fd[2];
     int prev_fd = -1;
     int *pids = malloc(data->cmd_nb * sizeof(int));
-     t_cmd *tmp = data->cmd_lst;
+    t_cmd *tmp = data->cmd_lst;
     while(tmp)
     {
         if(i < data->cmd_nb - 1)
@@ -172,13 +172,18 @@ void    excute_cmnds(t_data *data)
                 return ;
             }
         }
-            // pipe(fd);
+        if(signal(SIGINT, handle_sigint_child_process) == SIG_ERR)
+                perror("signal");
         // printf("%d | %d | %d\n", fd[0], fd[1], prev_fd);
         pid = fork();
         pids[i] = pid;
         if(pid == 0)
         {
-        signal(SIGINT, handle_sigint_in_heredoc);
+            if(signal(SIGINT, SIG_DFL) == SIG_ERR)
+            {
+                perror("signal");
+                exit(EXIT_FAILURE);
+            }
             if(tmp->fd_input == -2 || tmp->fd_output == -2)
                 exit(EXIT_FAILURE);
             if(i > 0 && tmp->fd_input == -1)
@@ -276,4 +281,6 @@ void    excute_cmnds(t_data *data)
         waitpid(pids[i], &status, 0);
         i++;
     }
+    if(signal(SIGINT, handle_sigint) == SIG_ERR)
+                perror("signal");
 }

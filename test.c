@@ -37,3 +37,11 @@
 //     // if(var == NULL)
 //     //     return(1);
 // }
+
+int main()
+{
+    if(1 != 1)
+    {
+        printf("hello world");
+    }
+}

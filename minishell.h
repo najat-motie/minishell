@@ -40,6 +40,8 @@ typedef struct s_data
     t_cmd *cmd_lst;
 }   t_data;
 
+#include <termios.h>
+#include <signal.h>
 #include <stdio.h>
 #include "./libft/libft.h"
 #include <unistd.h>
@@ -48,7 +50,9 @@ typedef struct s_data
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void    handle_sigint_in_heredoc(int signum);
+void disable_echo_ctrl();
+void    handle_eof(t_data data);
+void    handle_sigint_child_process(int signum);
 char    *expand_input(t_data data, char *heredoc_input);
 int    handle_heredoc(t_data data, char *delimeter);
 int	ft_strcmp(char *s1, char *s2);

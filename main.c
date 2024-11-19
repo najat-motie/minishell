@@ -28,7 +28,7 @@ void other_commands(t_data data, char **commands)
 
     if (commands[0] != NULL)
     {
-        if(signal(SIGINT, SIG_IGN) == SIG_ERR)
+        if(signal(SIGINT, handle_sigint_child_process) == SIG_ERR)
             perror("signal");
         pid_t pid = fork();
         int status;
@@ -71,6 +71,7 @@ int main(int argc, char **argv, char **envp)
     data.exit_status = 0;
     int in;
     int out;
+    disable_echo_ctrl();
     if(signal(SIGQUIT, SIG_IGN) == SIG_ERR)
         perror("signal");
     if(signal(SIGINT, handle_sigint) == SIG_ERR)
@@ -82,9 +83,9 @@ int main(int argc, char **argv, char **envp)
     while (1)
     {
         data.input = readline(prompt);
-        if(!data.input)
-            break;
-        add_history(data.input);
+        handle_eof(data);
+        if(*data.input != '\0')
+            add_history(data.input);
         received_signal = 0;
         fill_cmd_lst(&data);
         data.cmd_nb = commands_numbr(data);

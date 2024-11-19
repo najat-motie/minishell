@@ -164,8 +164,8 @@ int    handle_heredoc(t_data data, char *delimeter)
     char *input;
     int status;
     pid_t pid = fork();
-    if(signal(SIGINT, handle_sigint_in_heredoc) == SIG_ERR)
-            perror("signal");
+    if(signal(SIGINT, SIG_IGN) == handle_sigint_child_process)
+        perror("signal");
     if(pid == 0)
     {
         if(signal(SIGINT, SIG_DFL) == SIG_ERR)
@@ -194,22 +194,12 @@ int    handle_heredoc(t_data data, char *delimeter)
     else if(pid > 0)
     {
         waitpid(pid, &status, 0);
-        if(signal(SIGINT, handle_sigint) == SIG_ERR)
-            perror("signal");
-        // if (WIFSIGNALED(status))
-        // {
-        //     int signal_num = WTERMSIG(status);
-        //     // printf("Child process was terminated by signal: %d\n", signal_num);
-        //     // if (signal_num == SIGINT)
-        //     // {
-        //     //     signal(SIGINT, SIG_IGN);
-        //     // }
-        // }
-        // else if (WIFEXITED(status))
-        // {
-        //     int exit_code = WEXITSTATUS(status);
-        //     printf("Child process exited normally with exit code: %d\n", exit_code);
-        // }
+        if (WIFSIGNALED(status))
+        {
+            int signal_num = WTERMSIG(status);
+            if (signal_num == SIGINT)
+                signal(SIGINT, handle_sigint);
+        }
     }
     else
         perror("fork");
@@ -222,34 +212,52 @@ void    handle_redirects(t_data *data)
     t_cmd *tmp_cmd = NULL;
     t_red *tmp_red = NULL;
     tmp_cmd = data->cmd_lst;
-    while(tmp_cmd)
+    while(tmp_cmd && !received_signal)
     {
+        tmp_cmd->fd_heredoc = -1;
         tmp_red = tmp_cmd->red_lst;
-        while(tmp_red)
+        while(tmp_red && !received_signal)
         {
             if(ft_strcmp(tmp_red->symbol_type, "<<") == 0)
+            {
+                close(tmp_cmd->fd_heredoc);
                 tmp_cmd->fd_heredoc = handle_heredoc(*data, tmp_red->file_name);
+            }
             tmp_red = tmp_red->next;
         }
         tmp_cmd = tmp_cmd->next;
     }
     if(data->cmd_lst)
         tmp_cmd = data->cmd_lst;
-    while(tmp_cmd)
+    while(tmp_cmd && !received_signal)
     {
+        tmp_cmd->fd_input = -1;
+        tmp_cmd->fd_output = -1;
         tmp_red = tmp_cmd->red_lst;
-        while(tmp_red)
+        while(tmp_red && !received_signal)
         {
             if(tmp_cmd->fd_input == -2 || tmp_cmd->fd_output == -2)
                 break ;
             if(ft_strcmp(tmp_red->symbol_type, ">") == 0)
+            {
+                close(tmp_cmd->fd_output);
                 tmp_cmd->fd_output = redirect_output(tmp_red->file_name);
+            }
             if(ft_strcmp(tmp_red->symbol_type, ">>") == 0)
+            {
+                close(tmp_cmd->fd_output);
                 tmp_cmd->fd_output = redirect_append(tmp_red->file_name);
+            }
             if(ft_strcmp(tmp_red->symbol_type, "<") == 0)
+            {
+                close(tmp_cmd->fd_input);
                 tmp_cmd->fd_input = redirect_input(tmp_red->file_name);
+            }
             if(ft_strcmp(tmp_red->symbol_type, "<<") == 0)
+            {
+                close(tmp_cmd->fd_input);
                 tmp_cmd->fd_input = tmp_cmd->fd_heredoc;
+            }
             tmp_red = tmp_red->next;
         }
         tmp_cmd = tmp_cmd->next;
