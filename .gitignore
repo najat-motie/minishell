@@ -1,0 +1,13 @@
+# Ignore compiled files
+*.o
+*.out
+
+# Ignore files and directories
+/notes/
+to_do_list
+
+# Visual Studio Code:
+.vscode/
+
+# Ignore system files
+.DS_Store
