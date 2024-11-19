@@ -28,10 +28,17 @@ void other_commands(t_data data, char **commands)
 
     if (commands[0] != NULL)
     {
+        if(signal(SIGINT, SIG_IGN) == SIG_ERR)
+            perror("signal");
         pid_t pid = fork();
         int status;
         if (pid == 0) 
         {
+            if(signal(SIGINT, SIG_DFL) == SIG_ERR)
+            {
+                perror("signal");
+                exit(EXIT_FAILURE);
+            }  
             char **argv = commands;   
             char *path = get_path(data, commands[0]);
             if(!path)
@@ -46,7 +53,11 @@ void other_commands(t_data data, char **commands)
             exit(EXIT_FAILURE);
         }
         else if (pid > 0)
+        {
             waitpid(pid, &status, 0);
+            if(signal(SIGINT, handle_sigint) == SIG_ERR)
+                perror("signal");
+        }
         else
             perror("fork");
     }
@@ -61,6 +72,8 @@ int main(int argc, char **argv, char **envp)
     int in;
     int out;
     if(signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+        perror("signal");
+    if(signal(SIGINT, handle_sigint) == SIG_ERR)
         perror("signal");
     data.envp = envp;
     fill_env_lst(&data);

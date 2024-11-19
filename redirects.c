@@ -164,8 +164,15 @@ int    handle_heredoc(t_data data, char *delimeter)
     char *input;
     int status;
     pid_t pid = fork();
+    if(signal(SIGINT, handle_sigint_in_heredoc) == SIG_ERR)
+            perror("signal");
     if(pid == 0)
     {
+        if(signal(SIGINT, SIG_DFL) == SIG_ERR)
+        {
+            perror("signal");
+            exit(EXIT_FAILURE);
+        }
         while(1)
         {
             input = readline(prompt);
@@ -185,7 +192,25 @@ int    handle_heredoc(t_data data, char *delimeter)
         exit(EXIT_SUCCESS);
     }
     else if(pid > 0)
+    {
         waitpid(pid, &status, 0);
+        if(signal(SIGINT, handle_sigint) == SIG_ERR)
+            perror("signal");
+        // if (WIFSIGNALED(status))
+        // {
+        //     int signal_num = WTERMSIG(status);
+        //     // printf("Child process was terminated by signal: %d\n", signal_num);
+        //     // if (signal_num == SIGINT)
+        //     // {
+        //     //     signal(SIGINT, SIG_IGN);
+        //     // }
+        // }
+        // else if (WIFEXITED(status))
+        // {
+        //     int exit_code = WEXITSTATUS(status);
+        //     printf("Child process exited normally with exit code: %d\n", exit_code);
+        // }
+    }
     else
         perror("fork");
     close(fd[1]);

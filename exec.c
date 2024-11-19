@@ -178,6 +178,7 @@ void    excute_cmnds(t_data *data)
         pids[i] = pid;
         if(pid == 0)
         {
+        signal(SIGINT, handle_sigint_in_heredoc);
             if(tmp->fd_input == -2 || tmp->fd_output == -2)
                 exit(EXIT_FAILURE);
             if(i > 0 && tmp->fd_input == -1)

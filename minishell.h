@@ -48,6 +48,7 @@ typedef struct s_data
 #include <readline/readline.h>
 #include <readline/history.h>
 
+void    handle_sigint_in_heredoc(int signum);
 char    *expand_input(t_data data, char *heredoc_input);
 int    handle_heredoc(t_data data, char *delimeter);
 int	ft_strcmp(char *s1, char *s2);
@@ -80,5 +81,6 @@ void    fill_env_lst(t_data *data);
 void    fill_export_lst(t_data *data);
 void    fill_cmd_lst(t_data *data);
 void    handle_redirects(t_data *data);
+void    handle_sigint(int signum);
 
 # endif

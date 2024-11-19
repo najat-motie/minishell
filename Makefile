@@ -13,7 +13,7 @@ CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -I/Users/nmotie-/.brew/opt/
 # LDFLAGS = -L./printf -llibftprintf.a
 
 # SRC = main.c utils.c exec.c free.c parsing.c redirect.c builtins.c init.c pipes.c here_doc.c env.c
-SRC = main.c utils.c parsing.c env.c export.c pwd.c builtins.c redirects.c exec.c unset.c
+SRC = main.c utils.c parsing.c env.c export.c pwd.c builtins.c redirects.c exec.c unset.c signals.c
 
 OBJ = $(SRC:.c=.o)
 
