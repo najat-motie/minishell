@@ -105,30 +105,31 @@ int is_quouted(char *value)
 	}
 	return(0);
 }
-void	export_commands(t_data *data)
+
+void	export_commands(t_data *data, char **commands)
 {
 	int i = 1;
 	char **var;
 	char *key_cmd;
 	char *value_cmd;
-	while(data->cmd_lst->commands[i])
+	while(commands[i])
 	{
-		var = ft_split(data->cmd_lst->commands[i], '=');
+		var = ft_split(commands[i], '=');
 		key_cmd = var[0];
-		value_cmd = ft_strchr(data->cmd_lst->commands[i], '=');
-    	add_to_env_export(data, key_cmd, value_cmd);
+		value_cmd = ft_strchr(commands[i], '=');
+    	add_to_env_export(data, key_cmd, value_cmd, commands[i]);
 		i++;
 	}
 }
 
-void	add_to_export_lst(t_data *data, char *key, char *value)
+void	add_to_export_lst(t_data *data, char *key, char *value, char *command)
 {
 	t_env *export_tmp = data->export_lst;
 	char *content;
 	if(is_quouted(value))
-		content = ft_strdup(data->cmd_lst->commands[1]);
+		content = ft_strdup(command);
 	else
-		content = add_quoutes(data->cmd_lst->commands[1]);
+		content = add_quoutes(command);
 	while(export_tmp)
 	{
 		if(ft_strncmp(export_tmp->key, key, ft_strlen(key)) == 0)

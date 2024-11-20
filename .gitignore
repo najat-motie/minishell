@@ -1,15 +1,15 @@
 # Ignore compiled files
 *.o
 .out
-minishell
-libft.a
+.minishell
+.libft.a
 
 # Ignore files and directories
 shell_notes
 to_do_list
 
 # Visual Studio Code:
-.vscode/
+.vscode
 
 # Ignore system files
 .DS_Store

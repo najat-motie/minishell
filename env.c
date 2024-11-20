@@ -92,7 +92,7 @@ void    print_env(t_data data)
     }
 }
 
-void	add_to_env_lst(t_data *data, char *key, char *value)
+void	add_to_env_lst(t_data *data, char *key, char *value, char *command)
 {
 	t_env *envp_tmp = data->env_lst;
 	while(envp_tmp)
@@ -101,22 +101,22 @@ void	add_to_env_lst(t_data *data, char *key, char *value)
 		{
 			free(envp_tmp->value);
 			envp_tmp->value = ft_strdup(value);
-			envp_tmp->content = ft_strdup(data->cmd_lst->commands[1]);
+			envp_tmp->content = ft_strdup(command);
 			return ;
 		}
 		else
 			envp_tmp = envp_tmp->next;
 	}
-	add_back(&data->env_lst, ft_newnode(data->cmd_lst->commands[1], key, value));
+	add_back(&data->env_lst, ft_newnode(command, key, value));
 }
 
-void	add_to_env_export(t_data *data, char *key, char *value)
+void	add_to_env_export(t_data *data, char *key, char *value, char *command)
 {
 	if(value)
 	{
-		add_to_env_lst(data, key, value);
-		add_to_export_lst(data, key, value);
+		add_to_env_lst(data, key, value, command);
+		add_to_export_lst(data, key, value, command);
 	}
 	else
-		add_to_export_lst(data, key, value);
+		add_to_export_lst(data, key, value, command);
 }

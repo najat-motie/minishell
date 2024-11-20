@@ -13,7 +13,7 @@ void    handle_eof(t_data data)
 {
     if(data.input == NULL)
     {
-        printf("exit\n");
+        // printf("exit\n");
         exit(EXIT_SUCCESS);
     }
 }

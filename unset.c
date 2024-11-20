@@ -60,7 +60,7 @@ void    remove_from_export(t_data *data, char *key)
     }
 }
 
-void    handle_unset(t_data *data, char **key)
+void    unset_commands(t_data *data, char **key)
 {
     int i = 1;
     while(data->cmd_lst->commands[i])

@@ -14,6 +14,17 @@ int is_builtin(char *command)
     return (0);
 }
 
+int builtin_only(char **commands)
+{
+    if(commands[0] != NULL)
+    {
+     if(ft_strcmp(commands[0], "cd") == 0 || ft_strcmp(commands[0], "exit") == 0
+            || (ft_strcmp(commands[0], "export") == 0 && commands[1] != NULL) || (ft_strcmp(commands[0], "unset") == 0 && commands[1] != NULL))
+            return (1);
+    }
+    return(0);
+}
+
 void    handle_cd(t_data *data)
 {
     if(data->cmd_lst->commands[1] != NULL)
@@ -136,7 +147,7 @@ void builtin_commands(t_data *data, char **commands)
                 data->exit_status = 1;
                 return ;
             }
-            export_commands(data);
+            export_commands(data, commands);
             data->exit_status = 0;
         }
         if(ft_strcmp(commands[0], "unset") == 0 && commands[1] != NULL)
@@ -146,7 +157,7 @@ void builtin_commands(t_data *data, char **commands)
                 data->exit_status = 1;
                 return ;
             }
-            handle_unset(data, commands);
+            unset_commands(data, commands);
             data->exit_status = 0;
         }
     }
