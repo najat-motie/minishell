@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:27:38 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/02/15 13:25:13 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/20 10:00:11 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(const char *s1)
 	size_t	len;
 	char	*dst;
 
+	if(!s1)
+		return(NULL);
 	i = 0;
 	len = ft_strlen(s1) + 1;
 	dst = (char *)malloc(len);

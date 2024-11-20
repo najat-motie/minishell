@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 void    handle_sigint(int signum)
 {
     (void)signum;
@@ -12,16 +12,12 @@ void    handle_sigint(int signum)
 void    handle_eof(t_data data)
 {
     if(data.input == NULL)
-    {
-        // printf("exit\n");
         exit(EXIT_SUCCESS);
-    }
 }
 
-void    handle_sigint_child_process(int signum)
+void    handle_sigint_in_child_process(int signum)
 {
     (void)signum;
-    received_signal = 1;
     printf("\n");
 }
 

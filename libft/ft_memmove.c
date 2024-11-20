@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:27:00 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/02/17 13:21:04 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/20 10:01:31 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 		}
 	}
 	else if (d <= s)
-	{
 		ft_memcpy(dst, src, len);
-	}
 	return (dst);
 }

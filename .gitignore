@@ -1,8 +1,8 @@
 # Ignore compiled files
 *.o
-.out
-.minishell
-.libft.a
+a.out
+minishell
+libft.a
 
 # Ignore files and directories
 shell_notes

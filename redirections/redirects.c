@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 int    redirect_output(char *file_name)
 {
@@ -164,7 +164,7 @@ int    handle_heredoc(t_data data, char *delimeter)
     char *input;
     int status;
     pid_t pid = fork();
-    if(signal(SIGINT, SIG_IGN) == handle_sigint_child_process)
+    if(signal(SIGINT, handle_sigint_in_child_process) == SIG_ERR)
         perror("signal");
     if(pid == 0)
     {

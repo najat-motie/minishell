@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:28:19 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/02/15 13:29:11 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/20 10:03:22 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,11 @@ char	*ft_strrchr(const char *s, int c)
 
 	i = 0;
 	while (s[i] != '\0')
-	{
 		i++;
-	}
 	while (i >= 0)
 	{
 		if (s[i] == (char)c)
-		{
 			return ((char *)&s[i]);
-		}
 		i--;
 	}
 	return (0);

@@ -50,42 +50,62 @@ typedef struct s_data
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void disable_echo_ctrl();
-void    handle_eof(t_data data);
-void    handle_sigint_child_process(int signum);
-char    *expand_input(t_data data, char *heredoc_input);
-int    handle_heredoc(t_data data, char *delimeter);
-int	ft_strcmp(char *s1, char *s2);
-void ft_free(char **str);
-t_env	*ft_newnode(char *content, char *key, char *value);
-void	add_back(t_env **lst, t_env *new);
-int is_quouted(char *value);
-int  not_valid_export(char **commands);
-int  not_valid_unset(char **commands);
-void    unset_commands(t_data *data, char **key);
-void	export_commands(t_data *data, char **commands);      
-char **get_keys(char **envp);
-char **get_value(char **envp);
-void	add_to_export_lst(t_data *data, char *key, char *value, char *command);
-void	add_to_env_export(t_data *data, char *key, char *value, char *command);
-void	update_old_pwd(t_data *data);
-void	update_new_pwd(t_data *data);
+
+//builtins
 int is_builtin(char *command);
 int builtin_only(char **commands);
+void    change_dir(t_data *data);
+void    print_env(t_data *data);
+void    print_export(t_data *data);
+void    echo_printing(char **commands);
+void    handle_pwd(t_data *data);
+void    handle_echo(t_data *data, char **commands);
+void handle_cd(t_data *data);
+void    handle_export(t_data *data, char **commands);
+void    handle_unset(t_data *data, char **commands);
+void handle_builtins(t_data *data, char **commands);
+
+//envirenmet
+t_env	*ft_new_env(char *content, char *key, char *value);
+void	add_back_env(t_env **lst, t_env *new);
+void    fill_env_lst(t_data *data);
+void	add_to_env_lst(t_data *data, char *key, char *value, char *command);
+int  not_valid_export(char **commands);
+void    fill_export_lst(t_data *data);
+void	export_commands(t_data *data, char **commands);
+char **get_keys(char **envp);
+char **get_value(char **envp);
+int is_quouted(char *value);
+char *add_quoutes(char *key, char *value);
+void	update_new_pwd_env(t_data *data, char *value);
+void	update_new_pwd_export(t_data *data, char *value);
+void	update_old_pwd_env(t_data *data, char *value);
+void	update_old_pwd_export(t_data *data, char *value);
+void	update_new_pwd(t_data *data);
+void	update_old_pwd(t_data *data);
+int  not_valid_unset(char **commands);
+void    remove_from_env(t_data *data, char *key);
+void    remove_from_export(t_data *data, char *key);
+void    unset_commands(t_data *data, char **key);
+
+//signals
+void disable_echo_ctrl();
+void    handle_eof(t_data data);
+void    handle_sigint(int signum);
+void    handle_sigint_in_child_process(int signum);
+
+
+char    *expand_input(t_data data, char *heredoc_input);
+int    handle_heredoc(t_data data, char *delimeter);
+void ft_free(char **str);
 char *retreive_value(t_data data, char *key);
-void builtin_commands(t_data *data, char **commands);
-void    print_env(t_data data);
-void    print_export(t_data data);
 int    redirect_output(char *file_name);
 int    redirect_input(char *file_name);
 int    redirect_append(char *file_name);
 int    handle_heredoc(t_data data, char *delimeter);
 char *get_path(t_data, char *command);
 void    excute_cmnds(t_data *data);
-void    fill_env_lst(t_data *data);
-void    fill_export_lst(t_data *data);
 void    fill_cmd_lst(t_data *data);
 void    handle_redirects(t_data *data);
-void    handle_sigint(int signum);
 
 # endif

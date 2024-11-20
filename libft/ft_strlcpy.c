@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:27:57 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/02/15 13:27:35 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/20 10:02:49 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	i = 0;
 	j = 0;
 	while (src[j] != '\0')
-	{
 		j++;
-	}
 	if (dstsize == 0)
 		return (j);
 	while (src[i] != '\0' && i < dstsize - 1)

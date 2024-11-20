@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 void    ft_free(char **s)
 {
@@ -51,7 +51,7 @@ int main(int argc, char **argv, char **envp)
         {
             handle_redirects(&data);
             if(data.cmd_nb == 1 && builtin_only(data.cmd_lst->commands) && received_signal == 0)
-                builtin_commands(&data, data.cmd_lst->commands);
+                handle_builtins(&data, data.cmd_lst->commands);
             else if(!received_signal)
                 excute_cmnds(&data);
         }

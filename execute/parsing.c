@@ -1,12 +1,12 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 char **get_commands(char **str)
 {
     int i = 0;
 	int j = 0;
 	int k = 0;
-	while(str[i] && (ft_strncmp(str[i], ">", ft_strlen(str[i])) != 0 && ft_strncmp(str[i], ">>", ft_strlen(str[i])) != 0 
-        && ft_strncmp(str[i], "<", ft_strlen(str[i])) != 0 && ft_strncmp(str[i], "<<", ft_strlen(str[i])) != 0))
+	while(str[i] && (ft_strcmp(str[i], ">") != 0 && ft_strcmp(str[i], ">>") != 0 
+        && ft_strcmp(str[i], "<") != 0 && ft_strcmp(str[i], "<<") != 0))
 	{
 		i++;
 		j++;
@@ -101,7 +101,7 @@ char **get_files(char **cmnds, int *not_quouted)
 	return(all_files);
 }
 
-t_red	*ft_newredict(char *type, char *file, int not_quouted)
+t_red	*ft_new_red(char *type, char *file, int not_quouted)
 {
 	t_red	*node;
 
@@ -139,17 +139,17 @@ void    fill_redicts_lst(char *commands, t_red **red_lst)
 	int i = 0;
 	while(types[i] && files[i])
 	{
-    	add_back_red(red_lst, ft_newredict(types[i], files[i], not_quouted));
+    	add_back_red(red_lst, ft_new_red(types[i], files[i], not_quouted));
 		i++;
 	}
 }
 
 // void    fill_redicts_lst(t_red **red_lst)
 // {
-//     add_back_red(red_lst, ft_newredict("<<", "a", 0));
-//     add_back_red(red_lst, ft_newredict("<<", "b", 0));
-//     // add_back_red(red_lst, ft_newredict("<<", "file3", 0));
-//     // add_back_red(red_lst, ft_newredict("<<", "file4", 0));
+//     add_back_red(red_lst, ft_new_red("<<", "a", 0));
+//     add_back_red(red_lst, ft_new_red("<<", "b", 0));
+//     // add_back_red(red_lst, ft_new_red("<<", "file3", 0));
+//     // add_back_red(red_lst, ft_new_red("<<", "file4", 0));
 // }
 
 t_cmd	*ft_newcmd(char *commands)

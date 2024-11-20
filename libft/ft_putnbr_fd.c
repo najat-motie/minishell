@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:27:15 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/02/02 11:23:26 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/20 10:01:52 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void	ft_putnbr_fd(int n, int fd)
 		nb = -nb;
 	}
 	if (nb > 9)
-	{
 		ft_putnbr_fd(nb / 10, fd);
-	}
 	ft_putchar_fd(nb % 10 + '0', fd);
 }

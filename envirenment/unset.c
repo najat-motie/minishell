@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 int  not_valid_unset(char **commands)
 {
@@ -49,7 +49,7 @@ void    remove_from_export(t_data *data, char *key)
     t_env *export_lst = data->export_lst;
     while(export_lst->next)
     {
-        if(ft_strcmp(export_lst->next->key , key) == 0)
+        if(ft_strcmp(export_lst->next->key, key) == 0)
         {
             tmp = export_lst->next;
             export_lst->next = tmp->next;

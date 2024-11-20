@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 char *get_path(t_data data, char *command)
 {
@@ -73,7 +73,7 @@ void    excute_cmnds(t_data *data)
                 return ;
             }
         }
-        if(signal(SIGINT, handle_sigint_child_process) == SIG_ERR)
+        if(signal(SIGINT, handle_sigint_in_child_process) == SIG_ERR)
                 perror("signal");
         // printf("%d | %d | %d\n", fd[0], fd[1], prev_fd);
         pid = fork();
@@ -133,7 +133,7 @@ void    excute_cmnds(t_data *data)
             if(is_builtin(tmp->commands[0]))
             {
                 // fprintf(stderr, "5--> i %d | cmd %d\n", i, data->cmd_nb);
-                builtin_commands(data, tmp->commands);
+                handle_builtins(data, tmp->commands);
                 exit(EXIT_SUCCESS);
             }
             else
@@ -144,6 +144,7 @@ void    excute_cmnds(t_data *data)
                 if(!path)
                 {
                     printf("%s: command not found\n", tmp->commands[0]);
+                    data->exit_status = 127;
                     exit(EXIT_FAILURE);
                 }
                 execve(path, argv, envp);

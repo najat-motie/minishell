@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:28:04 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/02/17 15:13:01 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/20 10:02:57 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 		return (NULL);
 	len_s = 0;
 	while (s[len_s])
-	{
 		len_s++;
-	}
 	result = (char *)malloc(len_s + 1);
 	if (result == NULL)
 		return (NULL);

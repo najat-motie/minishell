@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 13:32:24 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/02/17 13:25:33 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/20 10:02:05 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ static void	*free_memory(char **result, int j)
 	while (j >= 0)
 	{
 		if (result[j] != NULL)
-		{
 			free(result[j]);
-		}
 		j--;
 	}
 	free(result);
@@ -36,9 +34,7 @@ static int	count_words(const char *s, char c)
 	while (s[i])
 	{
 		if (s[i] != c && (i == 0 || s[i - 1] == c))
-		{
 			count++;
-		}
 		i++;
 	}
 	return (count);
