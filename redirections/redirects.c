@@ -42,22 +42,23 @@ int    redirect_append(char *file_name)
 char *retreive_value(t_data data, char *key)
 {
     t_env *env_tmp = data.env_lst;
-    int i = 0;
-    int j = 0;
-    char *value = NULL;
+    // int i = 0;
+    // int j = 0;
+    // char *value = NULL;
     while(env_tmp)
     {
         if(ft_strcmp(env_tmp->key, key) == 0)
         {
-            value = malloc(ft_strlen(env_tmp->value));
-            if(env_tmp->value[i] == '=')
-            {
-                i++;
-                while(env_tmp->value && env_tmp->value[i])
-                    value[j++] = env_tmp->value[i++];
-            }
-            value[j] = '\0';
-            return(value);
+            return(env_tmp->value);
+            // value = malloc(ft_strlen(env_tmp->value));
+            // if(env_tmp->value[i] == '=')
+            // {
+            //     i++;
+            //     while(env_tmp->value && env_tmp->value[i])
+            //         value[j++] = env_tmp->value[i++];
+            // }
+            // value[j] = '\0';
+            // return(value);
         }
         env_tmp = env_tmp->next;
     }
@@ -158,51 +159,34 @@ char    *expand_input(t_data data, char *heredoc_input)
 
 int    handle_heredoc(t_data data, char *delimeter)
 {
+    int in;
     int fd[2];
     pipe(fd);
-    char *prompt = "> ";
     char *input;
-    int status;
-    pid_t pid = fork();
-    if(signal(SIGINT, handle_sigint_in_child_process) == SIG_ERR)
-        perror("signal");
-    if(pid == 0)
+
+    in = dup(0);
+    signal(SIGINT, sigint_heredoc);
+    while(1)
     {
-        if(signal(SIGINT, SIG_DFL) == SIG_ERR)
+        write(1, "> ", 2);
+        input = get_next_line(0);
+        if(!input)
+            break;
+        if(data.cmd_lst->red_lst->not_quouted)
+            input = expand_input(data, input);
+        if(ft_strcmp(input, delimeter) == 0)
         {
-            perror("signal");
-            exit(EXIT_FAILURE);
-        }
-        while(1)
-        {
-            input = readline(prompt);
-            if(!input)
-                break;
-            if(data.cmd_lst->red_lst->not_quouted)
-                input = expand_input(data, input);
-            if(ft_strcmp(input, delimeter) == 0)
-            {
-                free(input);
-                break;
-            }
-            write(fd[1], input, ft_strlen(input));
-            write(fd[1], "\n", 1);
             free(input);
+            break;
         }
-        exit(EXIT_SUCCESS);
+        write(fd[1], input, ft_strlen(input));
+        write(fd[1], "\n", 1);
+        free(input);
     }
-    else if(pid > 0)
-    {
-        waitpid(pid, &status, 0);
-        if (WIFSIGNALED(status))
-        {
-            int signal_num = WTERMSIG(status);
-            if (signal_num == SIGINT)
-                signal(SIGINT, handle_sigint);
-        }
-    }
-    else
-        perror("fork");
+    dup2(in, 0);
+    close(in);
+    if(signal(SIGINT, sigint_parent) == SIG_ERR)
+        perror("signal");
     close(fd[1]);
     return(fd[0]);
 }
@@ -214,7 +198,6 @@ void    handle_redirects(t_data *data)
     tmp_cmd = data->cmd_lst;
     while(tmp_cmd && !received_signal)
     {
-        tmp_cmd->fd_heredoc = -1;
         tmp_red = tmp_cmd->red_lst;
         while(tmp_red && !received_signal)
         {
@@ -231,8 +214,6 @@ void    handle_redirects(t_data *data)
         tmp_cmd = data->cmd_lst;
     while(tmp_cmd && !received_signal)
     {
-        tmp_cmd->fd_input = -1;
-        tmp_cmd->fd_output = -1;
         tmp_red = tmp_cmd->red_lst;
         while(tmp_red && !received_signal)
         {

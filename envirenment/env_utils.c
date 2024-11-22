@@ -1,15 +1,15 @@
 #include "../minishell.h"
 
-t_env	*ft_new_env(char *content, char *key, char *value)
+t_env	*ft_new_env(char *key, char *value, int equal)
 {
 	t_env	*newnode;
 
 	newnode = malloc(sizeof(t_env));
 	if (newnode == NULL)
 		return (NULL);
-	newnode->content = ft_strdup(content);
 	newnode->key = key;
-	newnode->value = ft_strdup(value);
+	newnode->value = value;
+	newnode->equal = equal;
 	newnode->next = NULL;
 	return (newnode);
 }
@@ -27,6 +27,18 @@ void	add_back_env(t_env **lst, t_env *new)
 			node = node->next;
 		node->next = new;
 	}
+}
+
+int there_equal(char *command)
+{
+	int i = 0;
+	while(command[i])
+	{
+		if(command[i] == '=')
+			return(1);
+		i++;
+	}
+	return(0);
 }
 
 char **get_keys(char **envp)
@@ -58,11 +70,11 @@ char **get_value(char **envp)
 	if(value == NULL)
 		return(NULL);
 	i = 0;
-	char *var;
+	char **var;
 	while(envp[i])
 	{
-		var = ft_strchr(envp[i], '=');
-		value[i] = var;
+		var = ft_split(envp[i], '=');
+		value[i] = var[1];
 		i++;
 	}
 	value[i] = NULL;

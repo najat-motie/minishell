@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "minishell.h"
 
 void    ft_free(char **s)
 {
@@ -29,18 +29,17 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
     t_data data;
     data.exit_status = 0;
-    disable_echo_ctrl();
     if(signal(SIGQUIT, SIG_IGN) == SIG_ERR)
         perror("signal");
-    if(signal(SIGINT, handle_sigint) == SIG_ERR)
+    if(signal(SIGINT, sigint_parent) == SIG_ERR)
         perror("signal");
     data.envp = envp;
     fill_env_lst(&data);
-    fill_export_lst(&data);
     char *prompt = "minishell> ";
     while (1)
     {
-        data.input = readline(prompt);
+        write(1, prompt, ft_strlen(prompt));
+        data.input = get_next_line(0);
         handle_eof(data);
         if(*data.input != '\0')
             add_history(data.input);

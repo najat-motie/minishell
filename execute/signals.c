@@ -1,36 +1,32 @@
 #include "../minishell.h"
-void    handle_sigint(int signum)
+
+void    sigint_parent(int signum)
 {
     (void)signum;
     received_signal = 1;
-    rl_replace_line("", 0);
-    rl_on_new_line();
+    write(1, "\n", 1);
+    write(1, "minishell> ", 11);
+}
+
+void    sigint_heredoc(int signum)
+{
+    (void)signum;
+    received_signal = 1;
     write(STDOUT_FILENO, "\n", 1);
-    rl_redisplay();   
+    close(0);
+}
+
+void    sigint_child(int signum)
+{
+    (void)signum;
+    write(1, "\n", 1);
 }
 
 void    handle_eof(t_data data)
 {
     if(data.input == NULL)
-        exit(EXIT_SUCCESS);
-}
-
-void    handle_sigint_in_child_process(int signum)
-{
-    (void)signum;
-    printf("\n");
-}
-
-void disable_echo_ctrl()
-{
-    struct termios term;
-
-    if (tcgetattr(STDIN_FILENO, &term) == -1)
     {
-        perror("tcgetattr");
-        return;
+        write(1, "exit\n", 5);    
+        exit(EXIT_SUCCESS);
     }
-    term.c_lflag &= ~ECHOCTL;
-    if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-        perror("tcsetattr");
 }

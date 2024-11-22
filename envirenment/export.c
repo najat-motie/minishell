@@ -26,62 +26,52 @@ int  not_valid_export(char **commands)
 	return(0);
 }
 
-void    fill_export_lst(t_data *data)
+void    fill_env_lst(t_data *data)
 {
     int i = 0;
 	char **key = get_keys(data->envp);
 	char **value = get_value(data->envp);
-	data->export_lst = NULL;
+	data->env_lst = NULL;
     while(data->envp[i])
     {
-        add_back_env(&data->export_lst, ft_new_env(add_quoutes(key[i], value[i]), key[i], value[i]));
-		if(ft_strcmp(key[i], "PWD") == 0)
-			add_back_env(&data->export_lst, ft_new_env(ft_strdup("OLDPWD"), ft_strdup("OLDPWD"), NULL));
+        add_back_env(&data->env_lst, ft_new_env(key[i], value[i], 1));
         i++;
     }
 }
 
-void	add_to_export_lst(t_data *data, char *key, char *value, char *command)
+void	add_to_lst(t_data *data, char *key, char *value, int equal)
 {
-	t_env *export_tmp = data->export_lst;
-	char *content;
-	if(is_quouted(value))
-		content = ft_strdup(command);
-	else
-		content = add_quoutes(key, value);
-	while(export_tmp)
+	t_env *envp_tmp = data->env_lst;
+	while(envp_tmp)
 	{
-		if(ft_strcmp(export_tmp->key, key) == 0)
+		if(ft_strcmp(envp_tmp->key, key) == 0)
 		{
-			free(export_tmp->value);
-			export_tmp->value = ft_strdup(value);
-			export_tmp->content = content;
+			free(envp_tmp->value);
+			envp_tmp->value = value;
 			return ;
 		}
 		else
-			export_tmp = export_tmp->next;
+			envp_tmp = envp_tmp->next;
 	}
-	add_back_env(&data->export_lst, ft_new_env(content, key, ft_strdup(value)));
+	add_back_env(&data->env_lst, ft_new_env(key, value, equal));
 }
 
 void	export_commands(t_data *data, char **commands)
 {
 	int i = 1;
+	int equal = 0;
 	char **var;
 	char *key_cmd;
 	char *value_cmd;
 	while(commands[i])
 	{
+		if(there_equal(commands[i]))
+			equal = 1;
+
 		var = ft_split(commands[i], '=');
 		key_cmd = var[0];
-		value_cmd = ft_strchr(commands[i], '=');
-		if(value_cmd)
-		{
-			add_to_env_lst(data, key_cmd, value_cmd, commands[i]);
-			add_to_export_lst(data, key_cmd, value_cmd, commands[i]);
-		}
-		else
-			add_to_export_lst(data, key_cmd, value_cmd, commands[i]);
+		value_cmd = var[1];
+		add_to_lst(data, key_cmd, value_cmd, equal);
 		i++;
 	}
 }

@@ -4,7 +4,8 @@ char *get_path(t_data data, char *command)
 {
     int i = 0;
     int j = 0;
-    // char *path = getenv("PATH");
+    if(!command)
+        return(NULL);
     char *path = retreive_value(data, "PATH");
     if(path == NULL)
         return(NULL);
@@ -61,6 +62,8 @@ void    excute_cmnds(t_data *data)
     int fd[2];
     int prev_fd = -1;
     int *pids = malloc(data->cmd_nb * sizeof(int));
+    if(pids == NULL)
+        perror("malloc");
     t_cmd *tmp = data->cmd_lst;
     while(tmp)
     {
@@ -73,13 +76,13 @@ void    excute_cmnds(t_data *data)
                 return ;
             }
         }
-        if(signal(SIGINT, handle_sigint_in_child_process) == SIG_ERR)
+        if(signal(SIGINT, sigint_child) == SIG_ERR)
                 perror("signal");
-        // printf("%d | %d | %d\n", fd[0], fd[1], prev_fd);
         pid = fork();
         pids[i] = pid;
         if(pid == 0)
         {
+            int out = dup(1);
             if(signal(SIGINT, SIG_DFL) == SIG_ERR)
             {
                 perror("signal");
@@ -112,7 +115,7 @@ void    excute_cmnds(t_data *data)
             }
             if(tmp->fd_input != -1)
             {
-               close(fd[0]); 
+                close(fd[0]); 
                 if(dup2(tmp->fd_input, 0) == -1)
                 {
                     perror("dup2");
@@ -141,12 +144,14 @@ void    excute_cmnds(t_data *data)
                 char **argv = tmp->commands;
                 char *envp[] = {NULL};
                 char *path = get_path(*data, tmp->commands[0]);
-                if(!path)
+                if(!path && tmp->commands[0])
                 {
-                    printf("%s: command not found\n", tmp->commands[0]);
-                    data->exit_status = 127;
-                    exit(EXIT_FAILURE);
+                    write(out, tmp->commands[0], ft_strlen(tmp->commands[0]));
+                    write(out, ": command not found\n", 20);
+                    exit(127);
                 }
+                if(!path)
+                    exit(EXIT_SUCCESS);
                 execve(path, argv, envp);
                 perror("execve");
                 exit(EXIT_FAILURE);
@@ -173,9 +178,15 @@ void    excute_cmnds(t_data *data)
     i = 0;
     while(i < data->cmd_nb)
     {
-        waitpid(pids[i], &status, 0);
+        if(waitpid(pids[i], &status, 0) == -1)
+        {
+            perror("waitpid");
+            exit(EXIT_FAILURE);
+        }
+        if(WIFEXITED(status))
+            data->exit_status = WEXITSTATUS(status);
         i++;
     }
-    if(signal(SIGINT, handle_sigint) == SIG_ERR)
+    if(signal(SIGINT, sigint_parent) == SIG_ERR)
                 perror("signal");
 }

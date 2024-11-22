@@ -11,22 +11,32 @@ char **get_commands(char **str)
 		i++;
 		j++;
 	}
-    char **options = malloc((j + 1) * sizeof(char *));
+    char **commands = malloc((j + 1) * sizeof(char *));
 	i = 0;
     while (k < j)
-        options[k++] = str[i++];
-    options[k] = NULL;
-    return(options);
+        commands[k++] = str[i++];
+    commands[k] = NULL;
+    return(commands);
+}
+
+int number_redirects(char **command)
+{
+	int count = 0;
+	int i = 0;
+	while(command[i])
+	{
+		if(ft_strcmp(command[i], ">") == 0 || ft_strcmp(command[i], ">>") == 0 || ft_strcmp(command[i], "<") == 0 || ft_strcmp(command[i], "<<") == 0)
+			count++;
+		i++;
+	}
+	return(count);
 }
 
 char **get_types(char **cmnds)
 {
 	int i = 0;
-	while(cmnds[i])
-		i++;
-	int a = i / 2;
-	char **all_types = malloc((a + 1) * sizeof(char *));
-	i = 0;
+	int count = number_redirects(cmnds);
+	char **all_types = malloc((count + 1) * sizeof(char *));
 	int j = 0;
 	while(cmnds[i])
 	{
@@ -52,14 +62,12 @@ char **get_types(char **cmnds)
 	return(all_types);
 }
 
+
 char **get_files(char **cmnds, int *not_quouted)
 {
 	int i = 0;
-	while(cmnds[i])
-		i++;
-	int a = i / 2;
-	char **all_files = malloc((a + 1) * sizeof(char *));
-	i = 0;
+	int count = number_redirects(cmnds);
+	char **all_files = malloc((count + 1) * sizeof(char *));
 	int l = 0;
 	while(cmnds[i])
 	{
@@ -132,6 +140,7 @@ void	add_back_red(t_red **lst, t_red *new)
 
 void    fill_redicts_lst(char *commands, t_red **red_lst)
 {
+	// red_lst = NULL;
 	int not_quouted = 1;
 	char **cmnds = ft_split(commands, ' ');
 	char **files = get_files(cmnds, &not_quouted);

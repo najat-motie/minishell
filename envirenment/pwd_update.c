@@ -1,35 +1,49 @@
 #include "../minishell.h"
 
-char *add_equal(char *value)
+void	update_old_pwd(t_data *data)
 {
-    int i = 0;
-    int j = 0;
-    char *with_equal = malloc(ft_strlen(value) + 2);
-	if(!with_equal)
-		return(NULL);
-	with_equal[i++] = '=';
-    while(value && value[j])
-        with_equal[i++] = value[j++];
-    with_equal[i] = '\0';
-    return(with_equal);
+	t_env *tmp;
+	t_env *new_node;
+	t_env *env_tmp;
+
+	char value[1024];
+    if(!getcwd(value, sizeof(value)))
+    	perror("pwd");
+	env_tmp = data->env_lst; 
+	while(env_tmp)
+	{
+		if(ft_strcmp(env_tmp->key, "PWD") == 0)
+		{
+			tmp = env_tmp->next;
+			if(ft_strcmp(tmp->key, "OLDPWD") == 0)
+				tmp->value = ft_strdup(value);
+			else
+			{
+				new_node = ft_new_env("OLDPWD", ft_strdup(value), 1);
+				env_tmp->next = new_node;
+				new_node->next = tmp;
+				tmp = NULL;
+			}
+			return;
+		}
+		env_tmp = env_tmp->next;
+	}
 }
 
 void	update_new_pwd(t_data *data)
 {
-	char cwd[1024];
-    if(!getcwd(cwd, sizeof(cwd)))
+	char value[1024];
+    if(!getcwd(value, sizeof(value)))
     	perror("pwd");
-	char *value = add_equal(cwd);
-	update_new_pwd_env(data, value);
-	update_new_pwd_export(data, value);
+	t_env *env_tmp = data->env_lst;
+	while(env_tmp)
+	{
+		if(ft_strcmp(env_tmp->key, "PWD") == 0)
+		{
+			free(env_tmp->value);
+			env_tmp->value = ft_strdup(value);
+			break ;
+		}
+		env_tmp = env_tmp->next;
+	}
 }
-
-void	update_old_pwd(t_data *data)
-{
-	char cwd[1024];
-    if(!getcwd(cwd, sizeof(cwd)))
-    	perror("pwd");
-	char *value = add_equal(cwd);
-	update_old_pwd_env(data, value);
-	update_old_pwd_export(data, value);
-}	

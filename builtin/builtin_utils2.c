@@ -31,23 +31,36 @@ void    change_dir(t_data *data)
 
 void    print_env(t_data *data)
 {
-    t_env *env_lst = data->env_lst;
-	while(env_lst)
+    t_env *tmp_lst = data->env_lst;
+	while(tmp_lst)
 	{
-		printf("%s\n", env_lst->content);
-		env_lst = env_lst->next;
+		printf("%s", tmp_lst->key);
+        if(tmp_lst->value)
+		    printf("=%s\n", tmp_lst->value);
+        else
+            printf("\n");
+		tmp_lst = tmp_lst->next;
     }
     data->exit_status = 0;
 }
 
 void    print_export(t_data *data)
 {
-    t_env *export_lst = data->export_lst;
-	while(export_lst)
+   t_env *tmp_lst = data->env_lst;
+	while(tmp_lst)
 	{
 		printf("declare -x ");
-		printf("%s\n", export_lst->content);
-		export_lst = export_lst->next;
+		printf("%s", tmp_lst->key);
+        if(tmp_lst->equal)
+        {
+            printf("=");
+            printf("\"");
+            if(tmp_lst->value != NULL)
+                printf("%s", tmp_lst->value);
+            printf("\"");
+        }
+        printf("\n");
+        tmp_lst = tmp_lst->next;
     }
     data->exit_status = 0;
 }

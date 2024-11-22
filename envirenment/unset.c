@@ -26,7 +26,7 @@ int  not_valid_unset(char **commands)
 	return(0);
 }
 
-void    remove_from_env(t_data *data, char *key)
+void    remove_from_lst(t_data *data, char *key)
 {
     t_env *tmp;
     t_env *env_lst = data->env_lst;
@@ -43,30 +43,12 @@ void    remove_from_env(t_data *data, char *key)
     }
 }
 
-void    remove_from_export(t_data *data, char *key)
-{
-    t_env *tmp;
-    t_env *export_lst = data->export_lst;
-    while(export_lst->next)
-    {
-        if(ft_strcmp(export_lst->next->key, key) == 0)
-        {
-            tmp = export_lst->next;
-            export_lst->next = tmp->next;
-            free(tmp);
-            return ; 
-        }
-        export_lst = export_lst->next;
-    }
-}
-
 void    unset_commands(t_data *data, char **key)
 {
     int i = 1;
     while(data->cmd_lst->commands[i])
     {
-        remove_from_env(data, key[i]);
-        remove_from_export(data, key[i]);
+        remove_from_lst(data, key[i]);
         i++;
     }
 }

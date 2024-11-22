@@ -5,9 +5,10 @@ int received_signal;
 
 typedef struct s_env
 {
-    char *content;
+    // char *content;
     char *key;
     char *value;
+    int equal;
     struct s_env *next;
 }   t_env;
 
@@ -32,13 +33,16 @@ typedef struct s_cmd
 typedef struct s_data
 {
     int exit_status;
+    int cmd_nb;
     char *input;
     char **envp;
     t_env *env_lst;
-    t_env *export_lst;
-    int cmd_nb;
     t_cmd *cmd_lst;
 }   t_data;
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 #include <termios.h>
 #include <signal.h>
@@ -50,6 +54,8 @@ typedef struct s_data
 #include <readline/readline.h>
 #include <readline/history.h>
 
+
+char	*get_next_line(int fd);
 
 //builtins
 int is_builtin(char *command);
@@ -66,46 +72,40 @@ void    handle_unset(t_data *data, char **commands);
 void handle_builtins(t_data *data, char **commands);
 
 //envirenmet
-t_env	*ft_new_env(char *content, char *key, char *value);
+t_env	*ft_new_env(char *key, char *value, int equal);
 void	add_back_env(t_env **lst, t_env *new);
 void    fill_env_lst(t_data *data);
-void	add_to_env_lst(t_data *data, char *key, char *value, char *command);
 int  not_valid_export(char **commands);
-void    fill_export_lst(t_data *data);
 void	export_commands(t_data *data, char **commands);
 char **get_keys(char **envp);
 char **get_value(char **envp);
-int is_quouted(char *value);
-char *add_quoutes(char *key, char *value);
-void	update_new_pwd_env(t_data *data, char *value);
-void	update_new_pwd_export(t_data *data, char *value);
-void	update_old_pwd_env(t_data *data, char *value);
-void	update_old_pwd_export(t_data *data, char *value);
 void	update_new_pwd(t_data *data);
 void	update_old_pwd(t_data *data);
 int  not_valid_unset(char **commands);
-void    remove_from_env(t_data *data, char *key);
-void    remove_from_export(t_data *data, char *key);
 void    unset_commands(t_data *data, char **key);
+int there_equal(char *command);
 
 //signals
 void disable_echo_ctrl();
 void    handle_eof(t_data data);
-void    handle_sigint(int signum);
-void    handle_sigint_in_child_process(int signum);
+void    sigint_parent(int signum);
+void    sigint_heredoc(int sig);
+void    sigint_child(int sig);
+void    sigint_parent_rechange_behavior(int signum);
 
-
+//redirections
 char    *expand_input(t_data data, char *heredoc_input);
 int    handle_heredoc(t_data data, char *delimeter);
-void ft_free(char **str);
 char *retreive_value(t_data data, char *key);
 int    redirect_output(char *file_name);
 int    redirect_input(char *file_name);
 int    redirect_append(char *file_name);
 int    handle_heredoc(t_data data, char *delimeter);
+void    handle_redirects(t_data *data);
+
+void ft_free(char **str);
 char *get_path(t_data, char *command);
 void    excute_cmnds(t_data *data);
 void    fill_cmd_lst(t_data *data);
-void    handle_redirects(t_data *data);
 
 # endif

@@ -4,13 +4,13 @@ void handle_builtins(t_data *data, char **commands)
 {
     if (commands[0] != NULL)
     {
-        if(ft_strcmp(commands[0], "cd") == 0)
-            handle_cd(data);
         if(ft_strcmp(commands[0], "exit") == 0)
         {
             printf("exit\n");
             exit(EXIT_SUCCESS);
         }
+        if(ft_strcmp(commands[0], "cd") == 0)
+            handle_cd(data);
         if(ft_strcmp(commands[0], "export") == 0 && commands[1] != NULL)
             handle_export(data, commands);
         if(ft_strcmp(commands[0], "unset") == 0 && commands[1] != NULL)

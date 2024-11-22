@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:28:19 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/11/20 10:03:22 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/21 10:07:20 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_strrchr(const char *s, int c)
 	int	i;
 
 	i = 0;
+	if(!s)
+		return(NULL);
 	while (s[i] != '\0')
 		i++;
 	while (i >= 0)
@@ -25,5 +27,5 @@ char	*ft_strrchr(const char *s, int c)
 			return ((char *)&s[i]);
 		i--;
 	}
-	return (0);
+	return (NULL);
 }
