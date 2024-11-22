@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-int received_signal;
+int signal_received;
 
 typedef struct s_env
 {
@@ -91,12 +91,11 @@ void    sigint_parent_without_newline(int signum);
 
 //redirections
 char    *expand_input(t_data data, char *heredoc_input);
-int    handle_heredoc(t_data data, char *delimeter);
 char *retreive_value(t_data data, char *key);
 int    redirect_output(char *file_name);
 int    redirect_input(char *file_name);
 int    redirect_append(char *file_name);
-int    handle_heredoc(t_data data, char *delimeter);
+int    handle_heredoc(t_data *data, char *delimeter);
 void    handle_redirects(t_data *data);
 
 //execute

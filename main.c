@@ -42,15 +42,15 @@ int main(int argc, char **argv, char **envp)
         handle_eof(data);
         if(*data.input != '\0')
             add_history(data.input);
-        received_signal = 0;
+        signal_received = 0;
         fill_cmd_lst(&data);
         data.cmd_nb = commands_numbr(data);
         if(data.cmd_lst)
         {
             handle_redirects(&data);
-            if(data.cmd_nb == 1 && builtin_only(data.cmd_lst->commands) && received_signal == 0)
+            if(data.cmd_nb == 1 && builtin_only(data.cmd_lst->commands) && signal_received == 0)
                 handle_builtins(&data, data.cmd_lst->commands);
-            else if(!received_signal)
+            else if(!signal_received)
                 excute_cmnds(&data);
         }
     }

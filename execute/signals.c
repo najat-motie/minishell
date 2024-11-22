@@ -3,7 +3,7 @@
 void    sigint_parent(int signum)
 {
     (void)signum;
-    received_signal = 1;
+    signal_received = 1;
     rl_replace_line("", 0);
     write(STDOUT_FILENO, "\n", 1);
     rl_on_new_line();
@@ -13,7 +13,7 @@ void    sigint_parent(int signum)
 void    sigint_parent_without_newline(int signum)
 {
     (void)signum;
-    received_signal = 1;
+    signal_received = 1;
     rl_replace_line("", 0);
     rl_on_new_line();
     rl_redisplay();   
@@ -22,7 +22,7 @@ void    sigint_parent_without_newline(int signum)
 void    sigint_heredoc(int signum)
 {
     (void)signum;
-    received_signal = 1;
+    signal_received = 1;
     write(STDOUT_FILENO, "\n", 1);
     close(0);
 }

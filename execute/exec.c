@@ -187,6 +187,8 @@ void    excute_cmnds(t_data *data)
         }
         if(WIFEXITED(status))
             data->exit_status = WEXITSTATUS(status);
+        else if(WIFSIGNALED(status))
+            data->exit_status = WTERMSIG(status) + 128;
         i++;
     }
     if(signal(SIGINT, sigint_parent) == SIG_ERR)

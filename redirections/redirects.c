@@ -157,7 +157,7 @@ char    *expand_input(t_data data, char *heredoc_input)
     return(input);
 }
 
-int    handle_heredoc(t_data data, char *delimeter)
+int    handle_heredoc(t_data *data, char *delimeter)
 {
     int in;
     int fd[2];
@@ -165,14 +165,17 @@ int    handle_heredoc(t_data data, char *delimeter)
     char *input;
 
     in = dup(0);
-    signal(SIGINT, sigint_heredoc);
+    if(in == -1)
+        perror("dup");
+    if(signal(SIGINT, sigint_heredoc) == SIG_ERR)
+        perror("signal");
     while(1)
     {
         input = readline("> ");
         if(!input)
             break;
-        if(data.cmd_lst->red_lst->not_quouted)
-            input = expand_input(data, input);
+        if(data->cmd_lst->red_lst->not_quouted)
+            input = expand_input(*data, input);
         if(ft_strcmp(input, delimeter) == 0)
         {
             free(input);
@@ -182,8 +185,17 @@ int    handle_heredoc(t_data data, char *delimeter)
         write(fd[1], "\n", 1);
         free(input);
     }
-    dup2(in, 0);
-    close(in);
+    if(signal_received)
+    {
+        data->exit_status = 1;
+        dup2(in, 0);
+        close(in);
+    }
+    else
+    {
+        data->exit_status = 0;
+        close(in);
+    }
     if(signal(SIGINT, sigint_parent_without_newline) == SIG_ERR)
         perror("signal");
     close(fd[1]);
@@ -195,15 +207,15 @@ void    handle_redirects(t_data *data)
     t_cmd *tmp_cmd = NULL;
     t_red *tmp_red = NULL;
     tmp_cmd = data->cmd_lst;
-    while(tmp_cmd && !received_signal)
+    while(tmp_cmd && !signal_received)
     {
         tmp_red = tmp_cmd->red_lst;
-        while(tmp_red && !received_signal)
+        while(tmp_red && !signal_received)
         {
             if(ft_strcmp(tmp_red->symbol_type, "<<") == 0)
             {
                 close(tmp_cmd->fd_heredoc);
-                tmp_cmd->fd_heredoc = handle_heredoc(*data, tmp_red->file_name);
+                tmp_cmd->fd_heredoc = handle_heredoc(data, tmp_red->file_name);
             }
             tmp_red = tmp_red->next;
         }
@@ -211,10 +223,10 @@ void    handle_redirects(t_data *data)
     }
     if(data->cmd_lst)
         tmp_cmd = data->cmd_lst;
-    while(tmp_cmd && !received_signal)
+    while(tmp_cmd && !signal_received)
     {
         tmp_red = tmp_cmd->red_lst;
-        while(tmp_red && !received_signal)
+        while(tmp_red && !signal_received)
         {
             if(tmp_cmd->fd_input == -2 || tmp_cmd->fd_output == -2)
                 break ;
