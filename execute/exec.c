@@ -65,6 +65,10 @@ void    excute_cmnds(t_data *data)
     if(pids == NULL)
         perror("malloc");
     t_cmd *tmp = data->cmd_lst;
+    // if(signal(SIGINT, SIG_IGN) == SIG_ERR)
+    //         perror("signal");
+    if(signal(SIGINT, sigint_child) == SIG_ERR)
+            perror("signal");
     while(tmp)
     {
         if(i < data->cmd_nb - 1)
@@ -76,13 +80,10 @@ void    excute_cmnds(t_data *data)
                 return ;
             }
         }
-        if(signal(SIGINT, sigint_child) == SIG_ERR)
-                perror("signal");
         pid = fork();
         pids[i] = pid;
         if(pid == 0)
         {
-            int out = dup(1);
             if(signal(SIGINT, SIG_DFL) == SIG_ERR)
             {
                 perror("signal");
@@ -103,6 +104,7 @@ void    excute_cmnds(t_data *data)
                 // buffer[8] = 0;
                 // printf("%s\n", buffer);
             }
+            int out = dup(1);
             if(i < data->cmd_nb - 1 && tmp->fd_output == -1)
             {      
                 close(fd[0]);

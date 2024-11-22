@@ -4,8 +4,19 @@ void    sigint_parent(int signum)
 {
     (void)signum;
     received_signal = 1;
-    write(1, "\n", 1);
-    write(1, "minishell> ", 11);
+    rl_replace_line("", 0);
+    write(STDOUT_FILENO, "\n", 1);
+    rl_on_new_line();
+    rl_redisplay();   
+}
+
+void    sigint_parent_without_newline(int signum)
+{
+    (void)signum;
+    received_signal = 1;
+    rl_replace_line("", 0);
+    rl_on_new_line();
+    rl_redisplay();   
 }
 
 void    sigint_heredoc(int signum)
@@ -19,14 +30,11 @@ void    sigint_heredoc(int signum)
 void    sigint_child(int signum)
 {
     (void)signum;
-    write(1, "\n", 1);
+    write(STDOUT_FILENO, "\n", 1);
 }
 
 void    handle_eof(t_data data)
 {
     if(data.input == NULL)
-    {
-        write(1, "exit\n", 5);    
         exit(EXIT_SUCCESS);
-    }
 }

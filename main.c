@@ -38,8 +38,7 @@ int main(int argc, char **argv, char **envp)
     char *prompt = "minishell> ";
     while (1)
     {
-        write(1, prompt, ft_strlen(prompt));
-        data.input = get_next_line(0);
+        data.input = readline(prompt);
         handle_eof(data);
         if(*data.input != '\0')
             add_history(data.input);

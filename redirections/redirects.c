@@ -168,8 +168,7 @@ int    handle_heredoc(t_data data, char *delimeter)
     signal(SIGINT, sigint_heredoc);
     while(1)
     {
-        write(1, "> ", 2);
-        input = get_next_line(0);
+        input = readline("> ");
         if(!input)
             break;
         if(data.cmd_lst->red_lst->not_quouted)
@@ -185,7 +184,7 @@ int    handle_heredoc(t_data data, char *delimeter)
     }
     dup2(in, 0);
     close(in);
-    if(signal(SIGINT, sigint_parent) == SIG_ERR)
+    if(signal(SIGINT, sigint_parent_without_newline) == SIG_ERR)
         perror("signal");
     close(fd[1]);
     return(fd[0]);

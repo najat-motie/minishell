@@ -54,9 +54,6 @@ typedef struct s_data
 #include <readline/readline.h>
 #include <readline/history.h>
 
-
-char	*get_next_line(int fd);
-
 //builtins
 int is_builtin(char *command);
 int builtin_only(char **commands);
@@ -86,12 +83,11 @@ void    unset_commands(t_data *data, char **key);
 int there_equal(char *command);
 
 //signals
-void disable_echo_ctrl();
 void    handle_eof(t_data data);
 void    sigint_parent(int signum);
 void    sigint_heredoc(int sig);
 void    sigint_child(int sig);
-void    sigint_parent_rechange_behavior(int signum);
+void    sigint_parent_without_newline(int signum);
 
 //redirections
 char    *expand_input(t_data data, char *heredoc_input);
@@ -103,6 +99,7 @@ int    redirect_append(char *file_name);
 int    handle_heredoc(t_data data, char *delimeter);
 void    handle_redirects(t_data *data);
 
+//execute
 void ft_free(char **str);
 char *get_path(t_data, char *command);
 void    excute_cmnds(t_data *data);

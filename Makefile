@@ -6,8 +6,7 @@ RM = rm -rf
 
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -I/Users/nmotie-/.brew/opt/readline/include
  
-SRC = gnl/get_next_line.c \
-main.c envirenment/env_utils.c envirenment/export.c envirenment/unset.c envirenment/pwd_update.c \
+SRC = main.c envirenment/env_utils.c envirenment/export.c envirenment/unset.c envirenment/pwd_update.c \
 builtin/built_in.c builtin/builtin_utils1.c builtin/builtin_utils2.c builtin/handle_builtin.c \
 redirections/redirects.c execute/parsing.c execute/exec.c  execute/signals.c
 
