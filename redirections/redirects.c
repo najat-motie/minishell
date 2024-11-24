@@ -42,24 +42,11 @@ int    redirect_append(char *file_name)
 char *retreive_value(t_data data, char *key)
 {
     t_env *env_tmp = data.env_lst;
-    // int i = 0;
-    // int j = 0;
-    // char *value = NULL;
+
     while(env_tmp)
     {
         if(ft_strcmp(env_tmp->key, key) == 0)
-        {
-            return(env_tmp->value);
-            // value = malloc(ft_strlen(env_tmp->value));
-            // if(env_tmp->value[i] == '=')
-            // {
-            //     i++;
-            //     while(env_tmp->value && env_tmp->value[i])
-            //         value[j++] = env_tmp->value[i++];
-            // }
-            // value[j] = '\0';
-            // return(value);
-        }
+            return(env_tmp->value);           
         env_tmp = env_tmp->next;
     }
     return(NULL);
@@ -89,6 +76,11 @@ char    *expand_input(t_data data, char *heredoc_input)
     int removed_count = 0;
     int dollar = dollar_count(heredoc_input);
     char **expanded = malloc((dollar + 1) * sizeof(char *));
+    if(expanded == NULL)
+    {
+        perror("malloc");
+        return(NULL);
+    }
     while(heredoc_input[i])
     {
         if(heredoc_input[i] == '$')
@@ -105,6 +97,11 @@ char    *expand_input(t_data data, char *heredoc_input)
                     k++;
                 }
                 to_expand = malloc(k + 1);
+                if(to_expand == NULL)
+                {
+                    perror("malloc");
+                    return(NULL);
+                }
                 k = 0;
                 while((heredoc_input[i] >= 'a' && heredoc_input[i] <= 'z') || (heredoc_input[i] >= 'A' && heredoc_input[i] <= 'Z') || (heredoc_input[i] >= '0' && heredoc_input[i] <= '9') || (heredoc_input[i] == '_'))
                     to_expand[k++] = heredoc_input[i++];
@@ -125,7 +122,10 @@ char    *expand_input(t_data data, char *heredoc_input)
     }
     char *input = malloc(ft_strlen(heredoc_input) - ft_strlen(to_expand) - removed_count + count + 1);
     if(!input)
+    {
+        perror("malloc");
         return(NULL);
+    }
     i = 0;
     j = 0;
     k = 0;
@@ -161,9 +161,10 @@ int    handle_heredoc(t_data *data, char *delimeter)
 {
     int in;
     int fd[2];
-    pipe(fd);
     char *input;
 
+    if(pipe(fd) == -1)
+        perror("pipe");
     in = dup(0);
     if(in == -1)
         perror("dup");
@@ -181,24 +182,30 @@ int    handle_heredoc(t_data *data, char *delimeter)
             free(input);
             break;
         }
-        write(fd[1], input, ft_strlen(input));
-        write(fd[1], "\n", 1);
+       if( write(fd[1], input, ft_strlen(input)) == -1)
+            perror("write");
+        if(write(fd[1], "\n", 1))
+            perror("write");
         free(input);
     }
     if(signal_received)
     {
         data->exit_status = 1;
-        dup2(in, 0);
-        close(in);
+        if(dup2(in, 0) == -1)
+            perror("dup2");
+        if(close(in) == -1)
+            perror("close");
     }
     else
     {
         data->exit_status = 0;
-        close(in);
+        if(close(in) == -1)
+            perror("close");
     }
     if(signal(SIGINT, sigint_parent_without_newline) == SIG_ERR)
         perror("signal");
-    close(fd[1]);
+    if(close(fd[1]) == -1)
+        perror("close");
     return(fd[0]);
 }
 
@@ -214,7 +221,8 @@ void    handle_redirects(t_data *data)
         {
             if(ft_strcmp(tmp_red->symbol_type, "<<") == 0)
             {
-                close(tmp_cmd->fd_heredoc);
+                if(close(tmp_cmd->fd_heredoc) == -1)
+                    perror("close");
                 tmp_cmd->fd_heredoc = handle_heredoc(data, tmp_red->file_name);
             }
             tmp_red = tmp_red->next;
@@ -232,22 +240,26 @@ void    handle_redirects(t_data *data)
                 break ;
             if(ft_strcmp(tmp_red->symbol_type, ">") == 0)
             {
-                close(tmp_cmd->fd_output);
+                if(close(tmp_cmd->fd_output) == -1)
+                    perror("close");
                 tmp_cmd->fd_output = redirect_output(tmp_red->file_name);
             }
             if(ft_strcmp(tmp_red->symbol_type, ">>") == 0)
             {
-                close(tmp_cmd->fd_output);
+                if(close(tmp_cmd->fd_output) == -1)
+                    perror("close");
                 tmp_cmd->fd_output = redirect_append(tmp_red->file_name);
             }
             if(ft_strcmp(tmp_red->symbol_type, "<") == 0)
             {
-                close(tmp_cmd->fd_input);
+                if(close(tmp_cmd->fd_input) == -1)
+                    perror("close");
                 tmp_cmd->fd_input = redirect_input(tmp_red->file_name);
             }
             if(ft_strcmp(tmp_red->symbol_type, "<<") == 0)
             {
-                close(tmp_cmd->fd_input);
+                if(close(tmp_cmd->fd_input) == -1)
+                    perror("close");
                 tmp_cmd->fd_input = tmp_cmd->fd_heredoc;
             }
             tmp_red = tmp_red->next;

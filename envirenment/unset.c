@@ -35,7 +35,7 @@ void    remove_from_lst(t_data *data, char *key)
         if(ft_strcmp(env_lst->next->key , key) == 0)
         {
             tmp = env_lst->next;
-            env_lst = tmp->next;
+            env_lst->next = tmp->next;
             free(tmp);
             return ;
         }

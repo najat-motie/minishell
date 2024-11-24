@@ -6,11 +6,12 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:28:37 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/02/15 13:30:03 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/23 11:41:20 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "../minishell.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -21,13 +22,32 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	i = 0;
 	if (start > ft_strlen(s))
+	{
 		substring = (char *)malloc(1);
+		if(!substring)
+		{
+			perror("malloc");
+			return(NULL);
+		}
+	}
 	else if (len > ft_strlen(s) - start)
+	{
 		substring = (char *)malloc(ft_strlen(s) - start + 1);
+		if(!substring)
+		{
+			perror("malloc");
+			return(NULL);
+		}
+	}
 	else
+	{
 		substring = (char *)malloc(len + 1);
-	if (substring == NULL)
-		return (NULL);
+		if(!substring)
+		{
+			perror("malloc");
+			return(NULL);
+		}
+	}
 	if (start < ft_strlen(s))
 	{
 		while (s[start + i] && i < len)

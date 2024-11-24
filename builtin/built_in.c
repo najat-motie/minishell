@@ -2,17 +2,14 @@
 
 void    handle_pwd(t_data *data)
 {
-    char cwd[1024];
-    if(getcwd(cwd, sizeof(cwd)) != NULL)
+    char *pwd = get_pwd();
+    if(pwd)
     {
-        printf("%s\n", cwd);
+        printf("%s\n", pwd);
         data->exit_status = 0;
     }
     else
-    {
-        perror("pwd");
         data->exit_status = 1;
-    }
 }
 
 void    handle_echo(t_data *data, char **commands)

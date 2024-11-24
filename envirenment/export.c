@@ -75,3 +75,24 @@ void	export_commands(t_data *data, char **commands)
 		i++;
 	}
 }
+
+void    print_export(t_data *data)
+{
+   t_env *tmp_lst = data->env_lst;
+	while(tmp_lst)
+	{
+		printf("declare -x ");
+		printf("%s", tmp_lst->key);
+        if(tmp_lst->equal)
+        {
+            printf("=");
+            printf("\"");
+            if(tmp_lst->value != NULL)
+                printf("%s", tmp_lst->value);
+            printf("\"");
+        }
+        printf("\n");
+        tmp_lst = tmp_lst->next;
+    }
+    data->exit_status = 0;
+}

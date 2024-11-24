@@ -8,7 +8,7 @@ void	update_old_pwd(t_data *data)
 
 	char value[1024];
     if(!getcwd(value, sizeof(value)))
-    	perror("pwd");
+    	perror("getcwd");
 	env_tmp = data->env_lst; 
 	while(env_tmp)
 	{
@@ -34,7 +34,7 @@ void	update_new_pwd(t_data *data)
 {
 	char value[1024];
     if(!getcwd(value, sizeof(value)))
-    	perror("pwd");
+    	perror("getcwd");
 	t_env *env_tmp = data->env_lst;
 	while(env_tmp)
 	{

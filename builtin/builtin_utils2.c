@@ -8,7 +8,7 @@ void    change_dir(t_data *data)
     {
         if(chdir(data->cmd_lst->commands[1]) != 0)
         {
-            perror("cd");
+            perror("chdir");
             data->exit_status = -1;
         }
         else
@@ -18,10 +18,13 @@ void    change_dir(t_data *data)
     {
         home = getenv("HOME");
         if(home == NULL)
+        {
+            perror("getenv");
             return ;
+        }
         if(chdir(home) != 0)
         {
-            perror("cd");
+            perror("chdir");
             data->exit_status = -1;
         }
         else
@@ -29,40 +32,20 @@ void    change_dir(t_data *data)
     }
 }
 
-void    print_env(t_data *data)
+char *get_pwd()
 {
-    t_env *tmp_lst = data->env_lst;
-	while(tmp_lst)
-	{
-		printf("%s", tmp_lst->key);
-        if(tmp_lst->value)
-		    printf("=%s\n", tmp_lst->value);
-        else
-            printf("\n");
-		tmp_lst = tmp_lst->next;
+    char *pwd;
+    char cwd[1024];
+    if(getcwd(cwd, sizeof(cwd)) != NULL)
+    {
+        pwd = cwd;
+        return(pwd);
     }
-    data->exit_status = 0;
-}
-
-void    print_export(t_data *data)
-{
-   t_env *tmp_lst = data->env_lst;
-	while(tmp_lst)
-	{
-		printf("declare -x ");
-		printf("%s", tmp_lst->key);
-        if(tmp_lst->equal)
-        {
-            printf("=");
-            printf("\"");
-            if(tmp_lst->value != NULL)
-                printf("%s", tmp_lst->value);
-            printf("\"");
-        }
-        printf("\n");
-        tmp_lst = tmp_lst->next;
+    else
+    {
+        perror("getcwd");
+        return(NULL);
     }
-    data->exit_status = 0;
 }
 
 void    print_args(char **commands, int i)

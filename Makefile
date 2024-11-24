@@ -14,7 +14,7 @@ OBJ = $(SRC:.c=.o)
 
 $(NAME): $(OBJ) minishell.h
 	make -C ./libft
-	$(CC) $(CFLAGS) $(OBJ) -lreadline -lncurses ./libft/libft.a -L/Users/nmotie-/.brew/opt/readline/lib -o minishell
+	$(CC) $(CFLAGS) $(OBJ) -lreadline ./libft/libft.a -L/Users/nmotie-/.brew/opt/readline/lib -o minishell
 
 all: $(NAME)
 

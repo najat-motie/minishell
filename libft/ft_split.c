@@ -6,11 +6,12 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 13:32:24 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/11/20 10:02:05 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/23 11:42:21 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "../minishell.h"
 
 static void	*free_memory(char **result, int j)
 {
@@ -59,7 +60,10 @@ char	**ft_split(char const *s, char c)
 	initial_variables(&i, &j, &start);
 	result = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
 	if (result == NULL)
+	{
+		perror("malloc");
 		return (NULL);
+	}
 	while (j < count_words(s, c))
 	{
 		while (s[i] && s[i] == c)

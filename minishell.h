@@ -44,10 +44,8 @@ typedef struct s_data
 #  define BUFFER_SIZE 42
 # endif
 
-#include <termios.h>
-#include <signal.h>
-#include <stdio.h>
 #include "./libft/libft.h"
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -58,6 +56,7 @@ typedef struct s_data
 int is_builtin(char *command);
 int builtin_only(char **commands);
 void    change_dir(t_data *data);
+char *get_pwd();
 void    print_env(t_data *data);
 void    print_export(t_data *data);
 void    echo_printing(char **commands);

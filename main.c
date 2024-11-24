@@ -35,7 +35,7 @@ int main(int argc, char **argv, char **envp)
         perror("signal");
     data.envp = envp;
     fill_env_lst(&data);
-    char *prompt = "minishell> ";
+        char *prompt = "minishell> ";
     while (1)
     {
         data.input = readline(prompt);
