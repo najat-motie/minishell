@@ -71,6 +71,7 @@ void    handle_unset(t_data *data, char **commands);
 void handle_builtins(t_data *data, char **commands);
 
 //envirenmet
+int check_args(char *command);
 t_env	*ft_new_env(char *key, char *value, int equal);
 void	add_back_env(t_env **lst, t_env *new);
 void    fill_env_lst(t_data *data);

@@ -43,6 +43,7 @@ void    handle_input(t_data *data)
             excute_commands(data);
     }
 }
+
 int main(int argc, char **argv, char **envp) 
 {
     (void)argc;
