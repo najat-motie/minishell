@@ -6,15 +6,17 @@ RM = rm -rf
 
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g -I/Users/nmotie-/.brew/opt/readline/include
  
-SRC = main.c envirenment/env_utils.c envirenment/export.c envirenment/unset.c envirenment/pwd_update.c \
-builtin/built_in.c builtin/builtin_utils1.c builtin/builtin_utils2.c builtin/handle_builtin.c \
-redirections/redirects.c execute/parsing.c execute/exec.c  execute/signals.c
+SRC = main.c execution/envirenment/env_utils.c execution/envirenment/export.c execution/envirenment/unset.c execution/envirenment/pwd_update.c \
+execution/redirections/heredoc.c execution/redirections/heredoc_utils.c execution/redirections/redirects.c execution/redirections/redirects_utils.c \
+execution/builtin/built_in1.c execution/builtin/built_in2.c execution/builtin/builtin_utils.c execution/builtin/handle_builtin.c \
+execution/execute/exec.c execution/execute/path.c execution/execute/utils.c execution/execute/signals.c \
+parsing/parsing.c 
 
 OBJ = $(SRC:.c=.o)
 
 $(NAME): $(OBJ) minishell.h
-	make -C ./libft
-	$(CC) $(CFLAGS) $(OBJ) -lreadline ./libft/libft.a -L/Users/nmotie-/.brew/opt/readline/lib -o minishell
+	make -C execution/libft
+	$(CC) $(CFLAGS) $(OBJ) -lreadline execution/libft/libft.a -L/Users/nmotie-/.brew/opt/readline/lib -o minishell
 
 all: $(NAME)
 
@@ -25,11 +27,3 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
-
-
--I./printf : for include directories where header files are stored
--L./printf : for library directories
--llibftprintf.a : for linking a specific library
-CFLAGS : compiling flags
-LDFLAGS : linking flags
-make -C : Change to DIRECTORY before doing anything.
