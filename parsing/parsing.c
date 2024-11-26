@@ -219,4 +219,8 @@ void    fill_cmd_lst(t_data *data)
         add_back_cmd(&data->cmd_lst, ft_newcmd(commands[i]));
         i++;
     }
+	
+	// | without its two commands
+	// > without file
+	// 	---> syntax error
 }

@@ -50,6 +50,8 @@ typedef struct s_data
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <signal.h>
+ #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "execution/libft/libft.h"
@@ -86,6 +88,11 @@ void    unset_commands(t_data *data, char **key);
 int there_equal(char *command);
 
 //redirections
+int	dollar_count(char *heredoc_input);
+int	key_len(char *heredoc_input);
+int	values_len(char **values);
+char	*get_keyname(char *heredoc_input, int *removed_count, int *i);
+void	skip_key(char *heredoc_input, int *i);
 char    *expand_input(t_data data, char *heredoc_input);
 int    handle_heredoc(t_data *data, char *delimeter);
 int    redirect_output(char *file_name);

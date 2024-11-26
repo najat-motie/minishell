@@ -52,7 +52,7 @@ void	handle_childs(t_data *data, t_fd *fd_)
 		pid[i] = fork();
 		if (pid[i] == 0)
 			handle_child(data, tmp, *fd_, i);
-		else if (pid > 0)
+		else if (pid[i] > 0)
 			save_read_of_pipe(*data, fd_, i);
 		else
 		{
