@@ -10,6 +10,14 @@ void    sigint_parent(int signum)
     rl_redisplay();   
 }
 
+void    sigint_heredoc(int signum)
+{
+    (void)signum;
+    signal_received = 1;
+    write(STDOUT_FILENO, "\n", 1);
+    close(0);
+}
+
 void    sigint_parent_without_newline(int signum)
 {
     (void)signum;
@@ -19,22 +27,14 @@ void    sigint_parent_without_newline(int signum)
     rl_redisplay();   
 }
 
-void    sigint_heredoc(int signum)
-{
-    (void)signum;
-    signal_received = 1;
-    write(STDOUT_FILENO, "\n", 1);
-    close(0);
-}
-
 void    sigint_child(int signum)
 {
     (void)signum;
     write(STDOUT_FILENO, "\n", 1);
 }
 
-void    handle_eof(t_data data)
+void    sigquit_child(int signum)
 {
-    if(data.input == NULL)
-        exit(EXIT_SUCCESS);
+    (void)signum;
+    write(STDOUT_FILENO, "Quit: 3\n", 8);
 }

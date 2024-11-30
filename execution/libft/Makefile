@@ -6,7 +6,7 @@
 #    By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/06 17:46:59 by nmotie-           #+#    #+#              #
-#    Updated: 2024/11/24 14:31:15 by nmotie-          ###   ########.fr        #
+#    Updated: 2024/11/29 17:33:43 by nmotie-          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ RM = rm -rf
 
 AR = ar -rc
 
-SRC = ft_strlen.c ft_strchr.c ft_strcmp.c ft_strdup.c ft_strjoin.c ft_split.c
+SRC = ft_strlen.c ft_atoi.c ft_strcmp.c ft_strchr.c ft_strdup.c ft_strjoin.c ft_split.c
 
 
 OBJ = ${SRC:.c=.o}

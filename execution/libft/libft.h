@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:46:52 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/11/24 14:30:48 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/11/28 19:57:29 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 
 size_t				ft_strlen(const char *s);
+int	ft_atoi(const char *str);
 char				*ft_strchr(const char *s, int c);
 int					ft_strcmp(char *s1, char *s2);
 char				*ft_strdup(const char *s1);

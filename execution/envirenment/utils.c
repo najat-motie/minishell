@@ -60,7 +60,8 @@ char **get_keys(char **envp)
 	while(envp[i])
 	{
 		var = ft_split(envp[i], '=');
-		key[i] = var[0];
+		key[i] = ft_strdup(var[0]);
+		ft_free(var);
 		i++;
 	}
 	key[i] = NULL;
@@ -83,7 +84,8 @@ char **get_value(char **envp)
 	while(envp[i])
 	{
 		var = ft_split(envp[i], '=');
-		value[i] = var[1];
+		value[i] = ft_strdup(var[1]);
+		ft_free(var);
 		i++;
 	}
 	value[i] = NULL;

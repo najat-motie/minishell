@@ -11,6 +11,12 @@ void    ft_free(char **s)
     free(s);
 }
 
+void    clear_resources(t_data *data)
+{
+    free(data->input);
+    lstclear_cmd(&data->cmd_lst);
+}
+
 int commands_numbr(t_data data)
 {
     int nb = 0;
@@ -23,12 +29,11 @@ int commands_numbr(t_data data)
     return(nb);
 }
 
-void    handle_input(t_data *data)
+void    handle_input(t_data *data, char *prompt)
 {
-    char *prompt = "minishell> ";
-
     data->input = readline(prompt);
-    handle_eof(*data);
+    if(data->input == NULL)
+        exit(EXIT_SUCCESS);
     if(*data->input != '\0')
         add_history(data->input);
     signal_received = 0;
@@ -42,6 +47,8 @@ void    handle_input(t_data *data)
         else if(!signal_received)
             excute_commands(data);
     }
+    clear_resources(data);
+    // system("leaks minishell");
 }
 
 int main(int argc, char **argv, char **envp) 
@@ -49,6 +56,7 @@ int main(int argc, char **argv, char **envp)
     (void)argc;
     (void)argv;
     t_data data;
+    char *prompt = "minishell> ";
 
     if(signal(SIGQUIT, SIG_IGN) == SIG_ERR)
         perror("signal");
@@ -56,8 +64,9 @@ int main(int argc, char **argv, char **envp)
         perror("signal");
     data.exit_status = 0;
     data.envp = envp;
-    fill_env_lst(&data);
+    fill_lst(&data);
     while (1)
-        handle_input(&data);
-    return 0;
+        handle_input(&data, prompt);
+    lstclear_env(&data.env_lst);
+    return(0);
 }

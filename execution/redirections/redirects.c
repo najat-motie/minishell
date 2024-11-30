@@ -24,8 +24,8 @@ void    heredoc_redirects(t_data *data)
 
 void    input_redirects(t_data *data)
 {
-    t_cmd *tmp_cmd = NULL;
-    t_red *tmp_red = NULL;
+    t_cmd *tmp_cmd;
+    t_red *tmp_red;
 
     tmp_cmd = data->cmd_lst;
     while(tmp_cmd && !signal_received)

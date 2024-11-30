@@ -82,7 +82,7 @@ void	check_path(char *path, char *command)
 {
 	if (ft_strcmp(path, "not valid command") == 0)
 	{
-		printf("%s: command not found\n", command);
+		printf("minishell: %s: command not found\n", command);
 		exit(127);
 	}
 	else if (!path && command)

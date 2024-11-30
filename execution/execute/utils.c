@@ -58,7 +58,7 @@ void	save_read_of_pipe(t_data data, t_fd *fd, int i)
 	}
 }
 
-void	create_pipe(t_data *data, int fd[], t_fd *fd_, int i)
+int	create_pipe(t_data *data, int fd[], t_fd *fd_, int i)
 {
 	if(i < data->cmd_nb - 1)
     {
@@ -66,11 +66,12 @@ void	create_pipe(t_data *data, int fd[], t_fd *fd_, int i)
         {
             perror("pipe");
             data->exit_status = 1;
-            return ;
+            return 0;
         }
     }
 	fd_->read_pipe = fd[0];
 	fd_->write_pipe = fd[1];
+	return(1);
 }
 
 void	wait_pids(t_data *data, int *pids)

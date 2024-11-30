@@ -1,15 +1,26 @@
 #include "../../minishell.h"
 
+char *get_pwd()
+{
+    char cwd[1024];
+
+    if(getcwd(cwd, sizeof(cwd)) == NULL)
+    {
+        perror("getcwd");
+        return(NULL);
+    }
+    return(ft_strdup(cwd));
+}
+
 void    change_to_home(t_data *data)
 {
-    char *home = getenv("HOME");
+    char *home = retreive_value(*data, "HOME");
     if(home == NULL)
     {
-        perror("getenv");
+        printf("minishell: cd: HOME not set\n");
         data->exit_status = 1;
-        return ;
     }
-    if(chdir(home) != 0)
+    else if(chdir(home) != 0)
     {
         perror("chdir");
         data->exit_status = 1;
@@ -35,34 +46,21 @@ void    change_dir(t_data *data)
         change_to_home(data);
 }
 
-char *get_pwd()
-{
-    char *pwd;
-    char cwd[1024];
-    if(getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        pwd = cwd;
-        return(pwd);
-    }
-    else
-    {
-        perror("getcwd");
-        return(NULL);
-    }
-}
-
-void    print_args(char **commands, int i)
+void    print_args(t_data data, char **commands, int i)
 {
     while(commands[i] != NULL)
     {
-        printf("%s", commands[i]);
+        if(there_dollar(commands[i]))
+            expand_dollar(data, commands[i]);
+        else
+            printf("%s", commands[i]);
         i++;
         if(commands[i])
             printf(" ");
     }
 }
 
-void    echo_printing(char **commands)
+void    echo_printing(t_data data, char **commands)
 {
     int i;
     int j;
@@ -83,7 +81,7 @@ void    echo_printing(char **commands)
             else
                 i--;
         }
-        print_args(commands, i);
+        print_args(data, commands, i);
     }
     if(newline)
         printf("\n");

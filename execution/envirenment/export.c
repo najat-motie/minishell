@@ -1,33 +1,6 @@
 #include "../../minishell.h"
 
-int	not_valid_export(char **commands)
-{
-	int	i;
-
-	i = 1;
-	while (commands[i])
-	{
-		if ((commands[i][0] < 'a' || commands[i][0] > 'z')
-			&& (commands[i][0] < 'A' || commands[i][0] > 'Z')
-			&& commands[i][0] != '_')
-		{
-			printf("export: `%s': not a valid identifier\n", commands[i]);
-			return (1);
-		}
-		while (commands[i])
-		{
-			if (check_args(commands[i]))
-			{
-				printf("export: `%s': not a valid identifier\n", commands[i]);
-				return (1);
-			}
-		}
-		i++;
-	}
-	return (0);
-}
-
-void	fill_env_lst(t_data *data)
+void	fill_lst(t_data *data)
 {
 	int		i;
 	char	**key;
@@ -63,7 +36,7 @@ void	add_to_lst(t_data *data, char *key, char *value, int equal)
 	add_back_env(&data->env_lst, ft_new_env(key, value, equal));
 }
 
-void	export_commands(t_data *data, char **commands)
+void	export_variables(t_data *data, char **commands)
 {
 	int		i;
 	int		equal;
@@ -80,7 +53,10 @@ void	export_commands(t_data *data, char **commands)
 		var = ft_split(commands[i], '=');
 		key_cmd = var[0];
 		value_cmd = var[1];
-		add_to_lst(data, key_cmd, value_cmd, equal);
+		if(not_valid(commands[i]))
+			ft_free(var);
+		else
+			add_to_lst(data, key_cmd, value_cmd, equal);
 		i++;
 	}
 }

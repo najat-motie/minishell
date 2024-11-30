@@ -6,7 +6,7 @@ libft.a
 
 # Ignore files and directories
 shell_notes
-to_do_list
+test.c
 
 # Visual Studio Code:
 .vscode
