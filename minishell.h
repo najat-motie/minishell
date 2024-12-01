@@ -77,7 +77,7 @@ void    handle_export(t_data *data, char **commands);
 void    handle_unset(t_data *data, char **commands);
 void handle_builtins(t_data *data, char **commands);
 
-//envirenmet
+//environment
 void	check_not_valid_variables(t_data *data, char **commands);
 int	not_valid(char *command);
 t_env	*ft_new_env(char *key, char *value, int equal);
