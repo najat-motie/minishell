@@ -10,6 +10,7 @@ t_red	*ft_new_red(char *type, char *file, int not_quouted)
 	node->symbol_type = type;
 	node->file_name = file;
 	node->not_quouted = not_quouted;
+	
 	node->next = NULL;
 	return (node);
 }

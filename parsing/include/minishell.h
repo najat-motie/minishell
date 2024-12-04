@@ -38,6 +38,7 @@ typedef struct s_cmd
 	int				infile;
 	int				outfile;
 	char			**cmd_param;
+	
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }				t_cmd;
