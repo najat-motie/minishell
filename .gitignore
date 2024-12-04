@@ -1,0 +1,15 @@
+# Ignore compiled files
+*.o
+a.out
+minishell
+libft.a
+
+# Ignore files and directories
+shell_notes
+test.c
+
+# Visual Studio Code:
+.vscode
+
+# Ignore system files
+.DS_Store
