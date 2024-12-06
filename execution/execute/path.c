@@ -1,4 +1,4 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 char *retreive_value(t_data data, char *key)
 {

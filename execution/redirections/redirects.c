@@ -1,4 +1,4 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 void    heredoc_redirects(t_data *data)
 { 
@@ -33,7 +33,7 @@ void    input_redirects(t_data *data)
         tmp_red = tmp_cmd->red_lst;
         while(tmp_red && !signal_received)
         {
-            if(tmp_cmd->input_fd == -2 || tmp_cmd->output_fd == -2)
+            if(tmp_cmd->input_fd == -1 || tmp_cmd->output_fd == -1)
                 break ;
             if(ft_strcmp(tmp_red->symbol_type, "<") == 0)
             {
@@ -62,7 +62,7 @@ void    output_redirects(t_data *data)
         tmp_red = tmp_cmd->red_lst;
         while(tmp_red && !signal_received)
         {
-            if(tmp_cmd->input_fd == -2 || tmp_cmd->output_fd == -2)
+            if(tmp_cmd->input_fd == -1 || tmp_cmd->output_fd == -1)
                 break ;
             if(ft_strcmp(tmp_red->symbol_type, ">") == 0)
             {

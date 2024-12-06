@@ -1,4 +1,4 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 char **fill_values(t_data data, char *heredoc_input, char **values, int *removed_count)
 {

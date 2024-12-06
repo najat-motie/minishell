@@ -1,4 +1,4 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 int	dollar_count(char *heredoc_input)
 {

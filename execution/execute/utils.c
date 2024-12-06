@@ -1,8 +1,8 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 void	set_input_and_output(t_data data, t_fd fd)
 {
-	if (data.cmd_lst->input_fd != -1)
+	if (data.cmd_lst->input_fd != -2)
 	{
 		close(fd.read_pipe);
 		if (dup2(data.cmd_lst->input_fd, 0) == -1)
@@ -12,7 +12,7 @@ void	set_input_and_output(t_data data, t_fd fd)
 		}
 		close(data.cmd_lst->input_fd);
 	}
-	if (data.cmd_lst->output_fd != -1)
+	if (data.cmd_lst->output_fd != -2)
 	{
 		close(fd.write_pipe);
 		if (dup2(data.cmd_lst->output_fd, 1) < 0)
@@ -26,7 +26,7 @@ void	set_input_and_output(t_data data, t_fd fd)
 
 void	set_read_write_pipe(t_data data, t_fd fd, int i)
 {
-	if (i > 0 && data.cmd_lst->input_fd == -1)
+	if (i > 0 && data.cmd_lst->input_fd == -2)
 	{
 		if (dup2(fd.prev_fd, 0) == -1)
 		{
@@ -35,7 +35,7 @@ void	set_read_write_pipe(t_data data, t_fd fd, int i)
 		}
 		close(fd.prev_fd);
 	}
-	if (i < data.cmd_nb - 1 && data.cmd_lst->output_fd == -1)
+	if (i < data.cmd_nb - 1 && data.cmd_lst->output_fd == -2)
 	{
 		close(fd.read_pipe);
 		if (dup2(fd.write_pipe, 1) == -1)
@@ -49,7 +49,7 @@ void	set_read_write_pipe(t_data data, t_fd fd, int i)
 
 void	save_read_of_pipe(t_data data, t_fd *fd, int i)
 {
-	if (fd->prev_fd != -1)
+	if (fd->prev_fd != -2)
 		close(fd->prev_fd);
 	if (i < data.cmd_nb - 1)
 	{
@@ -58,8 +58,10 @@ void	save_read_of_pipe(t_data data, t_fd *fd, int i)
 	}
 }
 
-int	create_pipe(t_data *data, int fd[], t_fd *fd_, int i)
+int	create_pipe(t_data *data, t_fd *fd_, int i)
 {
+	int		fd[2];
+
 	if(i < data->cmd_nb - 1)
     {
         if(pipe(fd) == -1)

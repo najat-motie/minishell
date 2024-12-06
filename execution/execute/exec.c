@@ -1,4 +1,4 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 void    execute_command(t_data *data, t_fd fd_, char **commands, int i)
 {
@@ -36,7 +36,7 @@ void	handle_child(t_data *data, t_cmd *tmp, t_fd fd_, int i)
 		perror("signal");
 		exit(EXIT_FAILURE);
 	}
-	if (tmp->input_fd == -2 || tmp->output_fd == -2)
+	if (tmp->input_fd == -1 || tmp->output_fd == -1)
 		exit(EXIT_FAILURE);
 	execute_command(data, fd_, tmp->commands, i);
 
@@ -46,25 +46,26 @@ void	handle_childs(t_data *data, t_fd *fd_)
 {
 	int		i;
 	t_cmd	*tmp;
-	int		fd[2];
 	int		pid[data->cmd_nb];
 
 	i = 0;
 	tmp = data->cmd_lst;
 	while (tmp)
 	{
-		if(!create_pipe(data, fd, fd_, i))
+		if(!create_pipe(data, fd_, i))
 			return;	
 		pid[i] = fork();
 		if (pid[i] == 0)
 			handle_child(data, tmp, *fd_, i);
-		else if (pid[i] > 0)
-			save_read_of_pipe(*data, fd_, i);
-		else
+		else if (pid[i] == -1)
 		{
+			close(fd_->read_pipe);
+			close(fd_->write_pipe);
 			perror("fork");
 			return ;
 		}
+		else
+			save_read_of_pipe(*data, fd_, i);
 		i++;
 		tmp = tmp->next;
 	}

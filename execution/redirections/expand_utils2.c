@@ -1,4 +1,4 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 char	*get_keyname(char *heredoc_input, int *removed_count, int *i)
 {

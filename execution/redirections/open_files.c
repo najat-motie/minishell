@@ -1,4 +1,4 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 int    redirect_input(char *file_name)
 {
@@ -8,7 +8,7 @@ int    redirect_input(char *file_name)
     if(fd == -1)
     {
         perror("open");
-        fd = -2;
+        return(fd);
     }
     return(fd);
 }
@@ -21,7 +21,7 @@ int    redirect_output(char *file_name)
     if(fd == -1)
     {
         perror("open");
-        fd = -2;
+        return(fd);
     }
     return(fd);
 }
@@ -34,7 +34,7 @@ int    redirect_append(char *file_name)
     if(fd == -1)
     {
         perror("open");
-        fd = -2;
+        return(fd);
     }
     return(fd);
 }

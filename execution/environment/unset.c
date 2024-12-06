@@ -1,4 +1,4 @@
-#include "../../minishell.h"
+#include "../minishell.h"
 
 void	remove_from_lst(t_data *data, char *key)
 {
