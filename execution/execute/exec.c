@@ -42,7 +42,7 @@ void	handle_child(t_data *data, t_cmd *tmp, t_fd fd_, int i)
 
 }
 
-void	handle_childs(t_data *data, t_fd *fd_)
+void	handle_childs(t_data *data, t_fd *fd)
 {
 	int		i;
 	t_cmd	*tmp;
@@ -52,20 +52,27 @@ void	handle_childs(t_data *data, t_fd *fd_)
 	tmp = data->cmd_lst;
 	while (tmp)
 	{
-		if(!create_pipe(data, fd_, i))
+		if(!create_pipe(data, fd, i))
 			return;	
 		pid[i] = fork();
 		if (pid[i] == 0)
-			handle_child(data, tmp, *fd_, i);
+			handle_child(data, tmp, *fd, i);
 		else if (pid[i] == -1)
 		{
-			close(fd_->read_pipe);
-			close(fd_->write_pipe);
+			if (fd->prev_fd != -2)
+				close(fd->prev_fd);
+			close(fd->read_pipe);
+			close(fd->write_pipe);
 			perror("fork");
+			while(i - 1 >= 0)
+			{
+				kill(pid[i], SIGKILL);
+				i--;
+			}
 			return ;
 		}
 		else
-			save_read_of_pipe(*data, fd_, i);
+			save_read_of_pipe(*data, fd, i);
 		i++;
 		tmp = tmp->next;
 	}
@@ -74,9 +81,9 @@ void	handle_childs(t_data *data, t_fd *fd_)
 
 void	excute_commands(t_data *data)
 {
-	t_fd fd_;
+	t_fd fd;
 	
-	fd_.prev_fd = -1;
+	fd.prev_fd = -1;
 	if(signal(SIGQUIT, sigquit_child) == SIG_ERR)
 	{
         perror("signal");
@@ -87,7 +94,7 @@ void	excute_commands(t_data *data)
 		perror("signal");
 		return ;
 	}
-	handle_childs(data, &fd_);
+	handle_childs(data, &fd);
 	if (signal(SIGINT, sigint_parent) == SIG_ERR)
 	{
 		perror("signal");
