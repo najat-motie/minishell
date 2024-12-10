@@ -26,9 +26,9 @@ WHITE		= \033[0;97m
 
 # Source
 FILES	=	main check_quote exit_env dollar_handle list_utils create_token \
-			list_token ms_utils  free array_utils \
+			list_token ms_utils  free  \
 			 list_cmd create_cmd create_cmd_fd handle_here_doc create_cmd_param \
-			debug
+			
 
 SRCS	=	$(addprefix $(SRC_DIR), $(addsuffix .c, $(FILES)))
 OBJS	=	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(FILES)))

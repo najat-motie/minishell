@@ -67,7 +67,7 @@ bool	parseline(t_data *data, char *line)
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
 	}
 	free(line);
-	print_token(data->token);
+	// print_token(data->token);
 	if (data->token && data->token->prev->type == PIPE)
 	{
 		write(2, "Error: Unclosed pipe\n", 21);

@@ -53,7 +53,6 @@ int	add_dollar(char *line, int *index, char **str, t_data *data)
 
 	n = *index;
 	ctrl = exist_in_env(line, index, data);
-	printf ("ctr = %d\n", ctrl);
 	if (ctrl == 1)
 		return (in_env(data, &line[n], *index - n, str));
 	else if (ctrl == 2)
@@ -63,13 +62,10 @@ int	add_dollar(char *line, int *index, char **str, t_data *data)
 	}
 	else
 	{
-		printf("line1: %s\n", line);
 		++(*index);
 		while (line[*index] && \
 			(ft_isalnum(line[*index]) || line[*index] == '_'))
 			++(*index);
-		printf("str: %s\n", *str);	
-		printf("line2: %s\n", line);
 		return (1);
 	}
 }
@@ -107,8 +103,6 @@ int	replace_dollar(char **line, t_data *data)
 	{
 
 		quoting(&data->sq,(*line)[i]);
-		printf(" sq: %d\n", data->sq);
-		printf("str[i]: %s\n", str);
 		if ((*line)[i] && (*line)[i + 1] && (*line)[i] == '$' && \
 			((*line)[i + 1] != '\'' && (*line)[i + 1] != '"') && \
 			(ft_isalpha((*line)[i + 1]) || (*line)[i + 1] == '?' || \
@@ -120,6 +114,6 @@ int	replace_dollar(char **line, t_data *data)
 	}
 	free(*line);
 	*line = str;
-	printf("line: %s\n", *line);
+
 	return (1);
 }
