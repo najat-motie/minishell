@@ -50,7 +50,7 @@ int	add_dollar(char *line, int *index, char **str, t_data *data)
 {
 	int		ctrl;
 	int		n;
-
+	int nbr ;
 	n = *index;
 	ctrl = exist_in_env(line, index, data);
 	if (ctrl == 1)
@@ -62,10 +62,24 @@ int	add_dollar(char *line, int *index, char **str, t_data *data)
 	}
 	else
 	{
+		// printf("index: %d\n", *index);
 		++(*index);
+		nbr = *index;
+		// printf("nbr: %d\n", nbr);
 		while (line[*index] && \
 			(ft_isalnum(line[*index]) || line[*index] == '_'))
+			{
+			if(ft_isdigit(line[nbr]))
+			{
+				// printf("line[nbr]: %c\n", line[nbr]);
+				++(*index);
+				while (line[*index] && \
+				(ft_isalnum(line[*index]) || line[*index] == '_'))
+					if(!add_char(&line[*index], str, data, index))
+					return (0);
+			}
 			++(*index);
+			}
 		return (1);
 	}
 }
@@ -102,7 +116,7 @@ int	replace_dollar(char **line, t_data *data)
 		quoting(&data->sq,(*line)[i]);
 		if ((*line)[i] && (*line)[i + 1] && (*line)[i] == '$' && \
 			((*line)[i + 1] != '\'' && (*line)[i + 1] != '"') && \
-			(ft_isalpha((*line)[i + 1]) || (*line)[i + 1] == '?' || \
+			(ft_isalnum((*line)[i + 1]) || (*line)[i + 1] == '?' || \
 			(*line)[i + 1] == '_') && !data->sq && \
 			!add_dollar((*line), &i, &str, data))
 			return (0);
