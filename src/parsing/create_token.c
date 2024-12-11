@@ -110,7 +110,6 @@ bool	create_list_token(t_token **begin, char *command)
 {
 	if(!*command || !command) 
 	{
-		printf("command is empty\n");
 		append_token(begin, ft_strdup(""), ARG);
 		return (true);
 	}

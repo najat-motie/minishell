@@ -1,10 +1,10 @@
 
 #include "../include/minishell.h"
 
-// void leaks(void)
-// {
-// 	system("leaks minishell");
-// }
+void leaks(void)
+{
+	system("leaks minishell");
+}
 
 int	make_env(t_data *data, char **env)
 {
@@ -67,7 +67,6 @@ bool	parseline(t_data *data, char *line)
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
 	}
 	free(line);
-	// print_token(data->token);
 	if (data->token && data->token->prev->type == PIPE)
 	{
 		write(2, "Error: Unclosed pipe\n", 21);
@@ -89,7 +88,7 @@ int	main(int argc, char **argv, char **env)
 	t_data	data;
 	char	*line;
 
-	// atexit(leaks);
+	atexit(leaks);
 	init_data(&data, argc, argv);
 	if (!make_env(&data, env))
 		free_all(&data, ERR_MALLOC, EXT_MALLOC);

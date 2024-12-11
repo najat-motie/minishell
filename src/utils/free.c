@@ -42,7 +42,6 @@ void	free_all(t_data *data, char *err, int ext)
 		free_list(&data->env);
 	if (err)
 		print_error(err);
-
 	if (ext != -1)
 		exit(ext);
 }
