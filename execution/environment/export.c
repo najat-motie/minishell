@@ -1,31 +1,34 @@
 #include "../../minishell.h"
 
-void	add_to_lst(t_data *data, char *key, char *value, int equal)
+void	add_to_lst(t_data *data, char **commands, int equal, int *i)
 {
+	char	**var;
 	t_env	*envp_tmp;
+	char	*key_cmd;
+	char	*value_cmd;
 
 	envp_tmp = data->env_lst;
+	var = ft_split(commands[*i], '=');
+	key_cmd = var[0];
+	value_cmd = var[1];
 	while (envp_tmp)
 	{
-		if (ft_strcmp(envp_tmp->key, key) == 0)
+		if (ft_strcmp(envp_tmp->key, key_cmd) == 0)
 		{
 			free(envp_tmp->value);
-			envp_tmp->value = value;
+			envp_tmp->value = value_cmd;
 			return ;
 		}
 		else
 			envp_tmp = envp_tmp->next;
 	}
-	add_back_env(&data->env_lst, ft_new_env(key, value, equal));
+	add_back_env(&data->env_lst, ft_new_env(key_cmd, value_cmd, equal, commands[*i]));
 }
 
 void	export_variables(t_data *data, char **commands)
 {
 	int		i;
 	int		equal;
-	char	**var;
-	char	*key_cmd;
-	char	*value_cmd;
 
 	i = 1;
 	equal = 0;
@@ -33,13 +36,10 @@ void	export_variables(t_data *data, char **commands)
 	{
 		if (there_equal(commands[i]))
 			equal = 1;
-		var = ft_split(commands[i], '=');
-		key_cmd = var[0];
-		value_cmd = var[1];
 		if(not_valid(commands[i]))
-			ft_free(var);
+			return ;
 		else
-			add_to_lst(data, key_cmd, value_cmd, equal);
+			add_to_lst(data, commands, equal, &i);
 		i++;
 	}
 }

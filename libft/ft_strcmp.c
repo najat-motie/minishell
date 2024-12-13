@@ -5,6 +5,7 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
+	// printf("heere\n");
 	if(!s1 && !s2)
 		return(0);
 	else if(!s1)

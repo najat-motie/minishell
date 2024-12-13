@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-t_env	*ft_new_env(char *key, char *value, int equal, char *content)
+t_env	*ft_new_env(char *key, char *value, int equal, char *str)
 {
 	t_env	*newnode;
 
@@ -13,7 +13,7 @@ t_env	*ft_new_env(char *key, char *value, int equal, char *content)
 	newnode->key = key;
 	newnode->value = value;
 	newnode->equal = equal;
-	newnode->content = content;
+	newnode->str = str;
 	newnode->next = NULL;
 	return (newnode);
 }

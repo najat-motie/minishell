@@ -4,16 +4,20 @@ void	set_input_and_output(t_data data, t_fd fd)
 {
 	if (data.cmd_lst->input_fd != -2)
 	{
+		printf("1-->%d\n", data.cmd_lst->input_fd);
 		close(fd.read_pipe);
-		if (dup2(data.cmd_lst->input_fd, 0) == -1)
+		int in;
+		if ((in = dup2(data.cmd_lst->input_fd, 0)) == -1)
 		{
 			perror("dup2");
 			exit(EXIT_FAILURE);
 		}
 		close(data.cmd_lst->input_fd);
+		printf("2-->%d\n", in);
 	}
 	if (data.cmd_lst->output_fd != -2)
 	{
+		// printf("here\n");
 		close(fd.write_pipe);
 		if (dup2(data.cmd_lst->output_fd, 1) < 0)
 		{

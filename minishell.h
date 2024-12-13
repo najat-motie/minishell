@@ -178,7 +178,7 @@ void handle_builtins(t_data *data, char **commands);
 //environment
 void	check_not_valid_variables(t_data *data, char **commands);
 int	not_valid(char *command);
-t_env	*ft_new_env(char *key, char *value, int equal, char *content);
+t_env	*ft_new_env(char *key, char *value, int equal, char *str);
 void	add_back_env(t_env **lst, t_env *new);
 void    make_env(t_data *data, char **envp);
 void	export_variables(t_data *data, char **commands);
@@ -189,21 +189,21 @@ void	update_old_pwd(t_data *data);
 void    unset_variables(t_data *data, char **key);
 int there_equal(char *command);
 
-// //redirections
-// void	init_vars(int *i, int *j, int *n);
-// int valid_dollar(char *heredoc_input, int *i);
-// void	replace_key_by_value(char *array, int *j, char **values, int *n);
-// int	dollar_count(char *heredoc_input);
-// int	key_len(char *heredoc_input, int *i);
-// int	values_len(char **values);
-// char	*get_keyname(char *heredoc_input, int *removed_count, int *i);
-// void	skip_key(char *heredoc_input, int *i);
-// char    *expand_input(t_data data, char *heredoc_input);
-// // int    handle_heredoc(t_data *data, char *delimeter);
-// int    redirect_output(char *file_name);
-// int    redirect_input(char *file_name);
-// int    redirect_append(char *file_name);
-// void    handle_redirects(t_data *data);
+//redirections
+void	init_vars(int *i, int *j, int *n);
+int valid_dollar(char *heredoc_input, int *i);
+void	replace_key_by_value(char *array, int *j, char **values, int *n);
+int	dollar_count(char *heredoc_input);
+int	key_len(char *heredoc_input, int *i);
+int	values_len(char **values);
+char	*get_keyname(char *heredoc_input, int *removed_count, int *i);
+void	skip_key(char *heredoc_input, int *i);
+char    *expand_input(t_data data, char *heredoc_input);
+// int    handle_heredoc(t_data *data, char *delimeter);
+int    redirect_output(char *file_name);
+int    redirect_input(char *file_name);
+int    redirect_append(char *file_name);
+void    handle_redirects(t_data *data);
 
 //signals
 void    sigint_parent(int signum);

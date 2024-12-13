@@ -150,7 +150,7 @@ int main(int argc, char **argv, char **envp)
         perror("signal");
     init_data(&data);
     make_env(&data, envp);
-    printf("%s\n", data.env_lst->content);
+    // printf("%s\n", data.env_lst->str);
     while (1)
     {
         signal_received = 0;
@@ -166,6 +166,7 @@ int main(int argc, char **argv, char **envp)
 			continue ;
 		if (!parseline(&data, line))
 			continue;
+        // printf("command[0]-->%s\n", data.cmd_lst->commands[0]);
         // printf("%s\n", data.cmd_lst->commands[0]);
         data.cmd_nb = commands_numbr(data);
         // printf("heereee\n");

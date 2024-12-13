@@ -1,22 +1,22 @@
 #include "../../minishell.h"
 
-static int	ft_search(char *value, char c)
+static int	ft_search(char *str, char c)
 {
 	int	i;
 
 	i = -1;
-	while (value[++i])
-		if (value[i] == c)
+	while (str[++i])
+		if (str[i] == c)
 			return (i);
 	return (0);
 }
 
-static int	end_word(char *value, char *env_lst)
+static int	end_word(char *str, char *env_lst)
 {
 	int	i;
 
 	i = 0;
-	while (value[i] && (ft_isalnum(value[i]) || value[i] == '_'))
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		++i;
 	if (i == ft_search(env_lst, '='))
 		return (i);
@@ -36,11 +36,11 @@ int	exist_in_env(char *line, int *i, t_data *data)
 	len = len_list(tmp);
 	while (len--)
 	{
-		if (ft_strncmp(tmp->value, &line[*i + 1], \
-			end_word(&line[*i + 1], tmp->value)) == 0)
+		if (ft_strncmp(tmp->str, &line[*i + 1], \
+			end_word(&line[*i + 1], tmp->str)) == 0)
 		{
-			*i += ft_strlen(tmp->value) - \
-				ft_strlen(ft_strchr(tmp->value, '=')) + 1;
+			*i += ft_strlen(tmp->str) - \
+				ft_strlen(ft_strchr(tmp->str, '=')) + 1;
 			return (1);
 		}
 		tmp = tmp->next;
@@ -61,13 +61,13 @@ char	*get_elem_env(t_env *env_lst, char *key)
 	t = ft_strlen(key);
 	while (len--)
 	{
-		if (ft_strncmp(tmp->value, key, t) == 0)
+		if (ft_strncmp(tmp->str, key, t) == 0)
 		{
 			len = 0;
-			while (tmp->value[len])
-				if (tmp->value[len++] == '=')
+			while (tmp->str[len])
+				if (tmp->str[len++] == '=')
 					break ;
-			return (ft_strdup(&(tmp->value[len])));
+			return (ft_strdup(&(tmp->str[len])));
 		}
 		tmp = tmp->next;
 	}

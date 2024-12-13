@@ -11,3 +11,6 @@ a.out
 
 # Ignore system files
 .DS_Store
+
+# other
+quoi

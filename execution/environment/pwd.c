@@ -15,10 +15,13 @@ void	update_old_pwd(t_data *data)
 		{
 			tmp = env_tmp->next;
 			if(ft_strcmp(tmp->key, "OLDPWD") == 0)
+			{
 				tmp->value = ft_strdup(value);
+				env_tmp->str = ft_strjoin("OLDPWD", value);
+			}
 			else
 			{
-				new_node = ft_new_env("OLDPWD", ft_strdup(value), 1);
+				new_node = ft_new_env("OLDPWD", ft_strdup(value), 1, ft_strjoin("OLDPWD", value));
 				env_tmp->next = new_node;
 				new_node->next = tmp;
 				tmp = NULL;
@@ -41,6 +44,7 @@ void	update_new_pwd(t_data *data)
 		{
 			free(env_tmp->value);
 			env_tmp->value = ft_strdup(value);
+			env_tmp->str = ft_strjoin("OLDPWD", value);
 			break ;
 		}
 		env_tmp = env_tmp->next;

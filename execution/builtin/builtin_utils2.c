@@ -2,6 +2,7 @@
 
 int	builtin_only(char **commands)
 {
+    // printf("%s\n", commands[0]);
 	if (commands[0] != NULL)
 	{
 		if (ft_strcmp(commands[0], "cd") == 0 || ft_strcmp(commands[0],
