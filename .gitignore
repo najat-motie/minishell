@@ -1,0 +1,13 @@
+# object files
+*.o
+libft.a
+
+# executable files
+minishell
+a.out
+
+# Visual Studio Code
+.vscode
+
+# Ignore system files
+.DS_Store
