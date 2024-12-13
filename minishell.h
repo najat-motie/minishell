@@ -39,6 +39,7 @@ typedef struct s_env
     char *key;
     char *value;
     int equal;
+	char *str;
     struct s_env *next;
 }   t_env;
 
@@ -48,7 +49,6 @@ typedef struct s_fd
     int read_pipe;
     int write_pipe;
 } t_fd;
-
 
 typedef struct s_cmd
 {
@@ -178,7 +178,7 @@ void handle_builtins(t_data *data, char **commands);
 //environment
 void	check_not_valid_variables(t_data *data, char **commands);
 int	not_valid(char *command);
-t_env	*ft_new_env(char *key, char *value, int equal);
+t_env	*ft_new_env(char *key, char *value, int equal, char *content);
 void	add_back_env(t_env **lst, t_env *new);
 void    make_env(t_data *data, char **envp);
 void	export_variables(t_data *data, char **commands);

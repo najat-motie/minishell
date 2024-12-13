@@ -22,7 +22,7 @@ void    write_to_file(int fd, char *input)
     write(fd, "\n", 1);
 }
 
-void    read_input(t_data *data, int fd, char *delimeter,int quote)
+void    read_input(t_data *data, int *fd, char *delimeter,int quote)
 {
     char *input;
 
@@ -31,14 +31,14 @@ void    read_input(t_data *data, int fd, char *delimeter,int quote)
         input = readline("> ");
 		if (!input)
 			break ;
-		if (!ft_strncmp(delimeter,input, INT_MAX))
+        if (!ft_strcmp(delimeter,input))
 			break ;
         if(!quote)
         {
             if(!replace_dollar(&input, data))
 			    free_all(data, ERR_MALLOC, EXT_MALLOC);
         }
-        write_to_file(fd, input);
+        write_to_file(fd[1], input);
         free(input);
     }
 }
@@ -76,7 +76,7 @@ int    handle_heredoc(t_data *data, char *delimeter,int *quote)
         perror("pipe");
         return(-1);
     }
-    read_input(data, fd[1], delimeter, *quote);
+    read_input(data, fd, delimeter, *quote);
     if(set_exit_status(data, in) == -1)
         return(-1);
     if(signal(SIGINT, sigint_parent_without_newline) == SIG_ERR)
@@ -84,6 +84,9 @@ int    handle_heredoc(t_data *data, char *delimeter,int *quote)
         perror("signal");
         return(-1);
     }
+    // char buffer[1024];
+    // read(fd[0], buffer, 10);
+    // printf("%s\n", buffer);
     close(fd[1]);
     return(fd[0]);
 }

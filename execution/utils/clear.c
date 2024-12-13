@@ -11,8 +11,9 @@ void	clear_env(t_env **lst)
 	while (node != NULL)
 	{
 		save_next = node->next;
-		free(node->key);
-		free(node->value);
+		// free(node->key);
+		// free(node->value);
+		// free(node->content);
 		free(node);
 		node = save_next;
 	}

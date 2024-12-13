@@ -24,6 +24,7 @@ void    execute_command(t_data *data, t_fd fd_, char **commands, int i)
 		check_path(path, commands[0]);
 	}
 	set_input_and_output(*data, fd_);
+	// printf("-->%d\n", data->cmd_lst->input_fd);
 	set_read_write_pipe(*data, fd_, i);
 	if (is_builtin(commands[0]))
 	{

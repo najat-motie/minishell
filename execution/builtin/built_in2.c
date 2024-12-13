@@ -7,6 +7,7 @@ void    print_env(t_data *data)
 	while(tmp_lst)
 	{
 		printf("%s", tmp_lst->key);
+        // printf("-->here\n");
         if(tmp_lst->value)
 		    printf("=%s\n", tmp_lst->value);
         else

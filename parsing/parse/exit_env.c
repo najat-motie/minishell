@@ -32,6 +32,7 @@ int	exist_in_env(char *line, int *i, t_data *data)
 	if (line[*i + 1] == '?' || line[*i + 1] == '$')
 		return (2);
 	tmp = data->env_lst;
+	// printf("--->%s\n", tmp->key);
 	len = len_list(tmp);
 	while (len--)
 	{

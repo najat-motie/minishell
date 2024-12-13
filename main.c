@@ -150,7 +150,7 @@ int main(int argc, char **argv, char **envp)
         perror("signal");
     init_data(&data);
     make_env(&data, envp);
-    // printf("%s\n", data.env_lst->key);
+    printf("%s\n", data.env_lst->content);
     while (1)
     {
         signal_received = 0;
