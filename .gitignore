@@ -1,14 +1,12 @@
-# Ignore compiled files
+# object files
 *.o
-a.out
-minishell
 libft.a
 
-# Ignore files and directories
-shell_notes
-test.c
+# executable files
+minishell
+a.out
 
-# Visual Studio Code:
+# Visual Studio Code
 .vscode
 
 # Ignore system files

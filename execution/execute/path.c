@@ -1,17 +1,4 @@
-#include "../minishell.h"
-
-char *retreive_value(t_data data, char *key)
-{
-    t_env *env_tmp = data.env_lst;
-
-    while(env_tmp)
-    {
-        if(ft_strcmp(env_tmp->key, key) == 0)
-            return(env_tmp->value);           
-        env_tmp = env_tmp->next;
-    }
-    return(NULL);
-}
+#include "../../minishell.h"
 
 char	*check_current_working_directory(char *command)
 {
@@ -29,17 +16,38 @@ char	*check_current_working_directory(char *command)
 		return (path);
 	else
 	{
+		free(path);
 		perror(command);
 		return (NULL);
 	}
 }
 
-char	*get_path_of_command(t_data data, char *command)
+char *search_path(char *path, char *command)
 {
-	int		i;
-	char	*path;
+	int i;
 	char	*full_path;
 	char	**all_paths;
+
+	i = 0;
+	all_paths = ft_split(path, ':');
+	while (all_paths != NULL && all_paths[i] != NULL)
+	{
+		full_path = ft_strjoin(ft_strjoin(all_paths[i], "/"), command);
+		if (access(full_path, X_OK) == 0)
+		{
+			path = ft_strdup(full_path);
+			ft_free(all_paths);
+			return (path);
+		}
+		i++;
+	}
+	return(NULL);
+}
+
+char	*get_path_of_command(t_data data, char *command)
+{
+	char	*path;
+	char *get_path;
 
 	path = retreive_value(data, "PATH");
 	if (path == NULL)
@@ -49,16 +57,11 @@ char	*get_path_of_command(t_data data, char *command)
 			return (path);
 		return (NULL);
 	}
-	i = 0;
-	all_paths = ft_split(path, ':');
-	while (all_paths != NULL && all_paths[i] != NULL)
-	{
-		full_path = ft_strjoin(ft_strjoin(all_paths[i], "/"), command);
-		if (access(full_path, X_OK) == 0)
-			return (full_path);
-		i++;
-	}
-	return ("not valid command");
+	get_path = search_path(path, command);
+		if(get_path)
+			return(get_path);
+		else
+			return ("not valid command");
 }
 
 char	*get_path(t_data data, char *command)

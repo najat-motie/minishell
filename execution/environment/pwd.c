@@ -1,4 +1,5 @@
-#include "../minishell.h"
+#include "../../minishell.h"
+
 void	update_old_pwd(t_data *data)
 {
 	char *value;

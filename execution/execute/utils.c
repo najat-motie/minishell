@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	set_input_and_output(t_data data, t_fd fd)
 {

@@ -1,4 +1,18 @@
-#include "../minishell.h"
+#include "../../minishell.h"
+
+void	clear_ressources(int *pid, t_fd *fd, int *i)
+{
+	if (fd->prev_fd != -2)
+		close(fd->prev_fd);
+	close(fd->read_pipe);
+	close(fd->write_pipe);
+	perror("fork");
+	while(*i - 1 >= 0)
+	{
+		kill(pid[*i], SIGKILL);
+		(*i)--;
+	}
+}
 
 void    execute_command(t_data *data, t_fd fd_, char **commands, int i)
 {
@@ -45,36 +59,28 @@ void	handle_child(t_data *data, t_cmd *tmp, t_fd fd_, int i)
 void	handle_childs(t_data *data, t_fd *fd)
 {
 	int		i;
-	t_cmd	*tmp;
 	int		pid[data->cmd_nb];
+	t_cmd	*tmp;
 
 	i = 0;
 	tmp = data->cmd_lst;
-	while (tmp)
+	while (1)
 	{
 		if(!create_pipe(data, fd, i))
-			return;	
-		pid[i] = fork();
-		if (pid[i] == 0)
+			return ;	
+		if ((pid[i] = fork()) == 0)
 			handle_child(data, tmp, *fd, i);
 		else if (pid[i] == -1)
 		{
-			if (fd->prev_fd != -2)
-				close(fd->prev_fd);
-			close(fd->read_pipe);
-			close(fd->write_pipe);
-			perror("fork");
-			while(i - 1 >= 0)
-			{
-				kill(pid[i], SIGKILL);
-				i--;
-			}
+			clear_ressources(pid, fd, &i);
 			return ;
 		}
 		else
 			save_read_of_pipe(*data, fd, i);
 		i++;
 		tmp = tmp->next;
+		if(tmp == data->cmd_lst)
+			break;
 	}
 	wait_pids(data, pid);
 }

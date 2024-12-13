@@ -1,21 +1,4 @@
-#include "../minishell.h"
-
-void	fill_lst(t_data *data)
-{
-	int		i;
-	char	**key;
-	char	**value;
-
-	i = 0;
-	key = get_keys(data->envp);
-	value = get_value(data->envp);
-	data->env_lst = NULL;
-	while (data->envp[i])
-	{
-		add_back_env(&data->env_lst, ft_new_env(key[i], value[i], 1));
-		i++;
-	}
-}
+#include "../../minishell.h"
 
 void	add_to_lst(t_data *data, char *key, char *value, int equal)
 {
