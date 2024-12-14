@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 16:22:19 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/14 16:33:47 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 char	*check_current_working_directory(char *command)
@@ -12,6 +24,7 @@ char	*check_current_working_directory(char *command)
 		return (NULL);
 	}
 	path = ft_strjoin(ft_strjoin(pwd, "/"), command);
+	free(pwd);
 	if (access(path, X_OK) == 0)
 		return (path);
 	else

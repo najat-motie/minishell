@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   built_in2.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 16:21:29 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/14 16:21:32 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 void    print_env(t_data *data)
@@ -7,7 +19,6 @@ void    print_env(t_data *data)
 	while(tmp_lst)
 	{
 		printf("%s", tmp_lst->key);
-        // printf("-->here\n");
         if(tmp_lst->value)
 		    printf("=%s\n", tmp_lst->value);
         else
