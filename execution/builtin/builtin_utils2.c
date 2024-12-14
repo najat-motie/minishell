@@ -28,12 +28,12 @@ int is_nemuric(char *command)
     return(1);
 }
 
-int there_dollar(char *command)
+int there_dollar(char *str)
 {
     int i = 0;
-    while(command[i])
+    while(str[i])
     {
-        if(command[i] == '$')
+        if(str[i] == '$')
             return(1);
         i++;
     }

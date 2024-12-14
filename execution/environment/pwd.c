@@ -1,10 +1,19 @@
 #include "../../minishell.h"
 
+void	add_old_pwd(t_env *env_tmp, t_env *tmp, char *value)
+{
+	t_env *new_node;
+
+	new_node = ft_new_env("OLDPWD", ft_strdup(value), 1, ft_strjoin("OLDPWD", value));
+	env_tmp->next = new_node;
+	new_node->next = tmp;
+	tmp = NULL;
+}
+
 void	update_old_pwd(t_data *data)
 {
 	char *value;
 	t_env *tmp;
-	t_env *new_node;
 	t_env *env_tmp;
 
 	value = get_pwd();
@@ -20,12 +29,7 @@ void	update_old_pwd(t_data *data)
 				env_tmp->str = ft_strjoin("OLDPWD", value);
 			}
 			else
-			{
-				new_node = ft_new_env("OLDPWD", ft_strdup(value), 1, ft_strjoin("OLDPWD", value));
-				env_tmp->next = new_node;
-				new_node->next = tmp;
-				tmp = NULL;
-			}
+				add_old_pwd(env_tmp, tmp, value);
 			return;
 		}
 		env_tmp = env_tmp->next;

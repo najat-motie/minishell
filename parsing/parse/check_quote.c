@@ -39,7 +39,7 @@ int	open_quote(t_data *data, char *line)
 	}
 	if (dq || sq)
 	{
-		print_error("open quote\n");
+		print_error("minishell: unclosed quotes\n");
 		data->exit_status = 2;
 		return (1);
 	}

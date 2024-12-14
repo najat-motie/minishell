@@ -21,8 +21,8 @@ bool	print_error(char *str)
 
 bool	print_error_token(t_token *token, t_data *data)
 {
-	write(2, "syntax error near unexpected token ", 35);
-	write(2, "'", 1);
+	write(2, "minishell: syntax error near unexpected token ", 35);
+	write(2, "`", 1);
 	if (token->next == data->token)
 		write(2, "newline", 7);
 	else
@@ -34,11 +34,9 @@ bool	print_error_token(t_token *token, t_data *data)
 void	free_all(t_data *data, char *err, int ext)
 {
 	if (data->cmd_lst)
-		free_cmd(&data->cmd_lst);
+	                   	free_cmd(&data->cmd_lst);
 	if (data->token)
 		free_token(&data->token);
-	if (data->env_lst)
-		free_list(&data->env_lst);
 	if (err)
 		print_error(err);
 	if (ext != -1)

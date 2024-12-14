@@ -2,27 +2,28 @@
 
 static bool	fill_cmd(t_data *data, t_token *tmp)
 {
-	if (!get_infile(data, tmp, data->cmd_lst->prev) && \
-		data->cmd_lst->prev->input_fd != -1)
-		return (false);
-	if (data->cmd_lst->prev->input_fd == -1)
-	{
-		data->cmd_lst->prev->skip_cmd = true;
-		data->cmd_lst->prev->output_fd = -1;
-		return (true);
-	}
-	if (!get_outfile(tmp, data->cmd_lst->prev, data) && data->cmd_lst->prev->output_fd \
-		!= -1)
-		return (false);
-	if (data->cmd_lst->prev->output_fd == -1)
-	{
-		if (data->cmd_lst->prev->input_fd >= 0)
-			close (data->cmd_lst->prev->input_fd);
-		data->cmd_lst->prev->skip_cmd = true;
-		data->cmd_lst->prev->input_fd = -1;
-		return (true);
-	}
-	data->cmd_lst->prev->commands = get_param(data, tmp);
+	// if (!get_infile(data, tmp, data->cmd_lst->prev) && \
+	// 	data->cmd_lst->prev->input_fd != -1)
+	// 	return (false);
+	// if (!get_outfile(tmp, data->cmd_lst->prev, data) && data->cmd_lst->prev->output_fd \
+	// 	!= -1)
+	// 	return (false);	
+	data->cmd_lst->prev->commands = get_param(data, tmp);	
+	// if (data->cmd_lst->prev->input_fd == -1)
+	// {
+	// 	data->cmd_lst->prev->skip_cmd = true;
+	// 	data->cmd_lst->prev->output_fd = -1;
+	// 	return (true);
+	// }
+	
+	// if (data->cmd_lst->prev->output_fd == -1)
+	// {
+	// 	if (data->cmd_lst->prev->input_fd >= 0)
+	// 		close (data->cmd_lst->prev->input_fd);
+	// 	data->cmd_lst->prev->skip_cmd = true;
+	// 	data->cmd_lst->prev->input_fd = -1;
+	// 	return (true);
+	// }
 	if (!data->cmd_lst->prev->commands)
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
 	return (true);

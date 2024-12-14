@@ -16,17 +16,11 @@ int before_start()
     return(in);
 }
 
-void    write_to_file(int fd, char *input)
-{
-    write(fd, input, ft_strlen(input));
-    write(fd, "\n", 1);
-}
-
-void    read_input(t_data *data, __unused int *fd, char *delimeter,int quote)
+void    read_input(t_data *data, int *fd, char *delimeter, int quote)
 {
     char *input;
+    char *expanded;
 
-    int fd_1 = open("tst",O_CREAT | O_RDWR,0777);
     while(1)
     {
         input = readline("> ");
@@ -34,12 +28,19 @@ void    read_input(t_data *data, __unused int *fd, char *delimeter,int quote)
 			break ;
         if (!ft_strcmp(delimeter, input))
 			break ;
-        if(!quote)
-            input = expand_input(*data, input);
-        write_to_file(fd_1, input);
-        // write_to_file(fd[1], input);
-        free(input);
+        if(!quote && there_dollar(input))
+        {
+            expanded = expand_input(*data, input);
+            ft_putendl_fd(expanded, fd[1]);
+            free(expanded);
+        }
+        else
+        {
+            ft_putendl_fd(input, fd[1]);
+            free(input);
+        }
     }
+    free(input);
 }
 
 int    set_exit_status(t_data *data, int in)
@@ -62,7 +63,7 @@ int    set_exit_status(t_data *data, int in)
     return(1);
 }
 
-int    handle_heredoc(t_data *data, char *delimeter, int *quote)
+int    handle_heredoc(t_data *data, char *delimeter, int quote)
 {
     int in;
     int fd[2];
@@ -75,7 +76,7 @@ int    handle_heredoc(t_data *data, char *delimeter, int *quote)
         perror("pipe");
         return(-1);
     }
-    read_input(data, fd, delimeter, *quote);
+    read_input(data, fd, delimeter, quote);
     if(set_exit_status(data, in) == -1)
         return(-1);
     if(signal(SIGINT, sigint_parent_without_newline) == SIG_ERR)

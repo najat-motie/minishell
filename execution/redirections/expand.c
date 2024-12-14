@@ -15,6 +15,7 @@ char **fill_values(t_data data, char *heredoc_input, char **values, int *removed
 				(*removed_count)++;
 				to_expand = get_keyname(heredoc_input, removed_count, &i);
 				values[j++] = retreive_value(data, to_expand);
+				free(to_expand);
 			}
 		}
 		i++;
@@ -27,7 +28,7 @@ char	**extract_values(t_data data, char *heredoc_input, int *removed_count)
 {
 	int		dollar;
 	char	**values;
-	char **values_;
+	char 	**values_;
 
 	dollar = dollar_count(heredoc_input);
 	values = malloc((dollar + 1) * sizeof(char *));
@@ -71,7 +72,7 @@ char	*fill_input(char *heredoc_input, char **values, char *array)
 char	*expand_input(t_data data, char *heredoc_input)
 {
 	char	*input;
-	char *array;
+	char 	*array;
 	int		removed_count;
 	int		len;
 	char	**values;
@@ -86,5 +87,6 @@ char	*expand_input(t_data data, char *heredoc_input)
 		return (NULL);
 	}
 	input = fill_input(heredoc_input, values, array);
+	ft_free(values);
 	return (input);
 }
