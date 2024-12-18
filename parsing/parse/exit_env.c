@@ -32,6 +32,7 @@ int	exist_in_env(char *line, int *i, t_data *data)
 	if (line[*i + 1] == '?' || line[*i + 1] == '$')
 		return (2);
 	tmp = data->env_lst;
+	// printf("--->%s\n", tmp->key);
 	len = len_list(tmp);
 	while (len--)
 	{
@@ -78,12 +79,17 @@ char	*get_dollar_word(char *line, int size)
 	char	*dollar;
 	int		i;
 
-	dollar = malloc(sizeof(char) * size);
+	// printf("size = %d\n", size);
+	dollar = malloc(sizeof(char) * (size + 1));
 	if (!dollar)
 		return (NULL);
 	i = 0;
-	while (line[++i] && i < size)
+	while (line[i++] && i <= size)
+	{
+		// printf("dollar[%d] = %c\n", i , line[i]);
 		dollar[i - 1] = line[i];
+	}
+
 	dollar[i - 1] = '\0';
 	return (dollar);
 }

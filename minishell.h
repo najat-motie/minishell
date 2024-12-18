@@ -1,32 +1,20 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:23:24 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:23:25 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <fcntl.h>
-#include <signal.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <limits.h>
 # include <stdbool.h>
-# include <sys/stat.h>
-# include <sys/wait.h>
 # include <sys/types.h>
-# include "libft/libft.h"
-# include <readline/history.h>
+# include <sys/wait.h>
+# include <limits.h>
+# include <fcntl.h>
+#include <signal.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
+# include <readline/history.h>
+# include "libft/libft.h"
 
 int signal_received;
 
@@ -39,9 +27,6 @@ int signal_received;
 # define ARG		7	//"|"
 
 # define ERR_MALLOC	"malloc error\n"
-# define ERR_PIPE	"pipe error\n"
-# define ERR_FORK	"fork error\n"
-
 # define EXT_MALLOC	1
 # define EXT_PIPE	1
 # define EXT_FORK	1
@@ -64,9 +49,9 @@ typedef struct s_fd
 
 typedef struct s_cmd
 {
-	int 			heredoc_fd;
 	int 			input_fd;
     int 			output_fd;
+	int				here_doc;
 	bool			skip_cmd;
 	char			**commands;
 	struct s_cmd	*prev;
@@ -82,29 +67,51 @@ typedef struct s_token
 	struct s_token	*next;
 }				t_token;
 
+// typedef struct s_list
+// {
+// 	char			*str;
+// 	struct s_list	*prev;
+// 	struct s_list	*next;
+// }					t_list;
+
 typedef struct s_data
 {
+	// char **envp;
+	// t_env	*env;
 	t_token	*token;
 	t_cmd	*cmd_lst;
-    t_env 	*env_lst;
+    t_env *env_lst;
 	int		exit_status;
-	int 	cmd_nb;
+	int cmd_nb;
 	bool	sq;
-}			t_data;
+	bool	dq;
+}				t_data;
 
+/* main */
+// int		make_env(t_data *data, char **env);
 
-// quote
+int    handle_heredoc(t_data *data, char *delimeter,int *quote);
+/* List utils */
+int		free_list(t_env **list);
+int		append(t_env **list, char *elem);
+size_t	len_list(t_env *list);
+
+/* quote */
 void	quoting_choice(bool *dq, bool *sq, int *index, char c);
 int		open_quote(t_data *data, char *line);
 int		exist_in_env(char *line, int *i, t_data *data);
 char	*get_elem_env(t_env *env, char *key);
 char	*get_dollar_word(char *line, int size);
+
 int		add_dollar(char *line, int *index, char **str, t_data *data);
 int		add_char(char *c, char **str, t_data *data, int *index);
 int		replace_dollar(char **line, t_data *data);
 
+
 //create_token.c
 bool	create_list_token(t_token **begin, char *command);
+
+//list_token.c
 int		append_token(t_token **list, char *str, int type);
 void	free_token(t_token **list);
 
@@ -112,16 +119,7 @@ void	free_token(t_token **list);
 bool	is_space(char c);
 int		is_special(char *str);
 bool	check_pipe(t_data *data);
-size_t	len_list(t_env *list);
 
-//create_list_cmds
-bool	create_list_cmd(t_data *data);
-int		append_cmd(t_cmd **list, int infile, int outfile, char **cmd_param);
-char	**get_param(t_data *data, t_token *token);
-void	free_cmd(t_cmd **list);
-size_t	len_cmd(t_cmd *list);
-bool	empty_line(char *line);
-bool	parseline(t_data *data, char *line);
 //free.c
 void	free_array(char **arr);
 bool	print_error(char *str);
@@ -129,11 +127,35 @@ void	free_all(t_data *data, char *err, int ext);
 bool	print_error_token(t_token *token, t_data *data);
 
 
-//************************************************************//
+//list_cmd.c
+int		append_cmd(t_cmd **list, int infile, int outfile,int here_doc, char **cmd_param);
+void	free_cmd(t_cmd **list);
+size_t	len_cmd(t_cmd *list);
+
+//create_cmd.c
+bool	create_list_cmd(t_data *data);
+
+//cmd_fd.c
+bool	get_infile(t_data *data, t_token *token, t_cmd *cmd);
+bool	get_outfile(t_token *token, t_cmd *cmd, t_data *data);
+bool	get_here_doc(t_data *data, t_token *token, t_cmd *cmd);
+//here_doc.c
+int		here_doc(t_data *data, char *word);
+
+//cmd_param.c
+char	**get_param(t_data *data, t_token *token);
+
+
+
+
+// ********        DEBUG        ********** //
+void	print_token(t_token *token);
+void	print_tab(char **tab);
+void	print_cmd(t_cmd *cmd);
 
 
 //builtins
-int  there_dollar(char *str);
+int there_dollar(char *command);
 void    get_status(char **commands);
 void    expand_dollar(t_data data, char *command);
 int is_nemuric(char *command);
@@ -144,7 +166,7 @@ void    handle_exit(char **commands);
 char *get_pwd();
 void    print_env(t_data *data);
 void    print_export(t_data *data);
-void    echo_printing(t_data data, char **commands);
+void    echo_printing(char **commands);
 void    handle_pwd(t_data *data);
 void    handle_echo(t_data *data, char **commands);
 void handle_cd(t_data *data);
@@ -153,7 +175,6 @@ void    handle_unset(t_data *data, char **commands);
 void handle_builtins(t_data *data, char **commands);
 
 //environment
-char 	*retreive_value(t_data data, char *key);
 void	check_not_valid_variables(t_data *data, char **commands);
 int	not_valid(char *command);
 t_env	*ft_new_env(char *key, char *value, int equal, char *str);
@@ -177,7 +198,7 @@ int	values_len(char **values);
 char	*get_keyname(char *heredoc_input, int *removed_count, int *i);
 void	skip_key(char *heredoc_input, int *i);
 char    *expand_input(t_data data, char *heredoc_input);
-int    handle_heredoc(t_data *data, char *delimeter, int quote);
+// int    handle_heredoc(t_data *data, char *delimeter);
 int    redirect_output(char *file_name);
 int    redirect_input(char *file_name);
 int    redirect_append(char *file_name);
@@ -194,6 +215,7 @@ void    sigquit_child(int signum);
 void	set_input_and_output(t_data data, t_fd fd);
 void	set_read_write_pipe(t_data data, t_fd fd, int i);
 void	save_read_of_pipe(t_data data, t_fd *fd, int i);
+char *retreive_value(t_data data, char *key);
 char	*get_path(t_data data, char *command);
 void	check_path(char *path, char *command);
 void	wait_pids(t_data *data, int *pids);
@@ -202,6 +224,11 @@ void	excute_commands(t_data *data);
 
 //other
 void    ft_free(char **s);
+// void    fill_cmd_lst(t_data *data);
 void	clear_env(t_env **lst);
+// void	lstclear_cmd(t_cmd **lst);
+// char **get_commands(char **str);
+// char **get_types(char **cmnds);
+// char **get_files(char **cmnds, int *not_quouted);
 
 #endif

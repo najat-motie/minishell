@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   clear.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:22:33 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:22:34 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 void	clear_env(t_env **lst)
@@ -23,11 +11,48 @@ void	clear_env(t_env **lst)
 	while (node != NULL)
 	{
 		save_next = node->next;
-		free(node->key);
-		free(node->value);
-		free(node->str);
+		// free(node->key);
+		// free(node->value);
+		// free(node->content);
 		free(node);
 		node = save_next;
 	}
 	*lst = NULL;
 }
+
+// void	lstclear_red(t_red **lst)
+// {
+// 	t_red	*node;
+// 	t_red	*save_next;
+
+// 	if (lst == NULL || *lst == NULL)
+// 		return ;
+// 	node = *lst;
+// 	while (node != NULL)
+// 	{
+// 		save_next = node->next;
+// 		free(node->file_name);
+// 		free(node->symbol_type);
+// 		free(node);
+// 		node = save_next;
+// 	}
+// 	*lst = NULL;
+// }
+
+// void	lstclear_cmd(t_cmd **lst)
+// {
+// 	t_cmd	*node;
+// 	t_cmd	*save_next;
+
+// 	if (lst == NULL || *lst == NULL)
+// 		return ;
+// 	node = *lst;
+// 	while (node != NULL)
+// 	{
+// 		save_next = node->next;
+// 		ft_free(node->commands);
+//         lstclear_red(&node->red_lst);
+// 		node = save_next;
+// 	}
+// 	*lst = NULL;
+// }

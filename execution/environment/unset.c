@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:22:05 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:22:06 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 void	remove_from_lst(t_data *data, char *key)
@@ -20,7 +8,7 @@ void	remove_from_lst(t_data *data, char *key)
 	env_lst = data->env_lst;
 	while (env_lst && env_lst->next)
 	{
-		if (ft_strcmp(env_lst->next->str, key) == 0)
+		if (ft_strcmp(env_lst->next->key, key) == 0)
 		{
 			tmp = env_lst->next;
 			env_lst->next = tmp->next;

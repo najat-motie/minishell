@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:22:15 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:22:16 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 void	clear_ressources(int *pid, t_fd *fd, int *i)
@@ -36,7 +24,7 @@ void    execute_command(t_data *data, t_fd fd_, char **commands, int i)
 		check_path(path, commands[0]);
 	}
 	set_input_and_output(*data, fd_);
-	// printf("-->%d\n", data->cmd_lst->input_fd);
+	// printf("data->cmd->inputfd-->%d\n", data->cmd_lst->input_fd);
 	set_read_write_pipe(*data, fd_, i);
 	if (is_builtin(commands[0]))
 	{

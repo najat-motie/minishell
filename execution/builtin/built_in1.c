@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   built_in1.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:21:25 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:27:20 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 void    handle_pwd(t_data *data)
@@ -18,7 +6,6 @@ void    handle_pwd(t_data *data)
     if(pwd)
     {
         printf("%s\n", pwd);
-        free(pwd);
         data->exit_status = 0;
     }
     else
@@ -29,7 +16,7 @@ void    handle_echo(t_data *data, char **commands)
 {
     if(ft_strcmp(commands[0], "echo") == 0)
     {
-        echo_printing(*data, commands);
+        echo_printing(commands);
         data->exit_status = 0;
     }
 }

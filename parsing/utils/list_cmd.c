@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-static int	cmd_new_elem(t_cmd **new, int input_fd, int output_fd, char **commands)
+static int	cmd_new_elem(t_cmd **new, int input_fd, int output_fd,int here_doc, char **commands)
 {
 	(*new) = malloc(sizeof(t_cmd));
 	if (*new == NULL)
@@ -8,17 +8,18 @@ static int	cmd_new_elem(t_cmd **new, int input_fd, int output_fd, char **command
 	(*new)->skip_cmd = false;
 	(*new)->input_fd = input_fd;
 	(*new)->output_fd = output_fd;
+	(*new)->here_doc = here_doc;
 	(*new)->commands = commands;
 	(*new)->next = NULL;
 	(*new)->prev = NULL;
 	return (1);
 }
 
-int	append_cmd(t_cmd **list, int input_fd, int output_fd, char **commands)
+int	append_cmd(t_cmd **list, int input_fd, int output_fd,int here_doc, char **commands)
 {
 	t_cmd	*new;
 
-	if (!cmd_new_elem(&new, input_fd, output_fd, commands))
+	if (!cmd_new_elem(&new, input_fd, output_fd, here_doc, commands))
 		return (0);
 	if (!(*list))
 	{

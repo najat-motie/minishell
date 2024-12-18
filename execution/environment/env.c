@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:21:54 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:21:55 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 void	make_env(t_data *data, char **envp)
@@ -21,9 +9,11 @@ void	make_env(t_data *data, char **envp)
 	i = 0;
 	key = get_keys(envp);
 	value = get_value(envp);
+	// printf("-->%s\n",envp[0]);
+	// data->env_lst = NULL;
 	while (envp[i])
 	{
-		add_back_env(&data->env_lst, ft_new_env(key[i], value[i], 1, ft_strdup(envp[i])));
+		add_back_env(&data->env_lst, ft_new_env(key[i], value[i], 1, envp[i]));
 		i++;
 	}
 }

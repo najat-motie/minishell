@@ -33,7 +33,7 @@ bool	check_pipe(t_data *data)
 {
 	if (data->token->type == PIPE)
 	{
-		write(2, "minishell: syntax error near unexpected token `|'\n", 39);
+		write(2, "syntax error near unexpected token '|'\n", 39);
 		free_token(&data->token);
 		free_cmd(&data->cmd_lst);
 		return (false);

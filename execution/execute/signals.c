@@ -1,22 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:22:22 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:22:23 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 void    sigint_parent(int signum)
 {
     (void)signum;
     signal_received = 1;
-    rl_replace_line("", 0);
+    // rl_replace_line("", 0);
     write(STDOUT_FILENO, "\n", 1);
     rl_on_new_line();
     rl_redisplay();   
@@ -34,7 +22,7 @@ void    sigint_parent_without_newline(int signum)
 {
     (void)signum;
     signal_received = 1;
-    rl_replace_line("", 0);
+    // rl_replace_line("", 0);
     rl_on_new_line();
     rl_redisplay();   
 }

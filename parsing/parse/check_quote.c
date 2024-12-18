@@ -2,12 +2,16 @@
 
 void	quoting_choice(bool *dq, bool *sq, int *index, char c)
 {
+	// if (c == '\'' && !*sq1)
+	// 	*sq1 = true;
+	// else if (c == '\'' && *sq1)
+	// 	*sq1 = false;
 	if ((c == '\'' || c == '"') && !*sq && !*dq)
 	{
 		if (c == '\'' && !*dq)
 			*sq = true;
 		else if (c == '"' && !*sq)
-			*dq = true;
+			*dq = true; //1
 		if (index)
 			++(*index);
 	}
@@ -39,7 +43,7 @@ int	open_quote(t_data *data, char *line)
 	}
 	if (dq || sq)
 	{
-		print_error("minishell: unclosed quotes\n");
+		print_error("open quote\n");
 		data->exit_status = 2;
 		return (1);
 	}

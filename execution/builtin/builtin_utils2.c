@@ -1,19 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_utils2.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:21:38 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:21:41 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 int	builtin_only(char **commands)
 {
+    // printf("%s\n", commands[0]);
 	if (commands[0] != NULL)
 	{
 		if (ft_strcmp(commands[0], "cd") == 0 || ft_strcmp(commands[0],
@@ -39,12 +28,12 @@ int is_nemuric(char *command)
     return(1);
 }
 
-int there_dollar(char *str)
+int there_dollar(char *command)
 {
     int i = 0;
-    while(str[i])
+    while(command[i])
     {
-        if(str[i] == '$')
+        if(command[i] == '$')
             return(1);
         i++;
     }

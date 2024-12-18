@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:22:37 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:22:38 by nmotie-          ###   ########.fr       */
+/*   Created: 2023/11/19 13:03:20 by ner-roui          #+#    #+#             */
+/*   Updated: 2023/11/26 11:03:20 by ner-roui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "libft.h"
 
-void    ft_free(char **s)
+void	ft_lstdelone(t_list *lst, void (*del)(void*))
 {
-    int i = 0;
-    while (s[i])
-    {
-        free(s[i]);
-        i++;
-    }
-    free(s);
+	if (lst == NULL || del == NULL)
+		return ;
+	del(lst -> content);
+	free(lst);
 }

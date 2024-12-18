@@ -2,28 +2,41 @@
 
 static bool	fill_cmd(t_data *data, t_token *tmp)
 {
-	// if (!get_infile(data, tmp, data->cmd_lst->prev) && \
-	// 	data->cmd_lst->prev->input_fd != -1)
-	// 	return (false);
-	// if (!get_outfile(tmp, data->cmd_lst->prev, data) && data->cmd_lst->prev->output_fd \
-	// 	!= -1)
-	// 	return (false);	
-	data->cmd_lst->prev->commands = get_param(data, tmp);	
-	// if (data->cmd_lst->prev->input_fd == -1)
-	// {
-	// 	data->cmd_lst->prev->skip_cmd = true;
-	// 	data->cmd_lst->prev->output_fd = -1;
-	// 	return (true);
-	// }
-	
-	// if (data->cmd_lst->prev->output_fd == -1)
-	// {
-	// 	if (data->cmd_lst->prev->input_fd >= 0)
-	// 		close (data->cmd_lst->prev->input_fd);
-	// 	data->cmd_lst->prev->skip_cmd = true;
-	// 	data->cmd_lst->prev->input_fd = -1;
-	// 	return (true);
-	// }
+	// char buff[100];
+	if (!get_here_doc(data, tmp, data->cmd_lst->prev) && \
+		data->cmd_lst->prev->here_doc != -1)
+		return (false);
+	// if(read(data->cmd_lst->here_doc, buff, 10) < 0)
+	// 	{
+	// 		printf("data.cmd.here_doc = %d\n", data->cmd_lst->here_doc);
+	// 		perror("read");
+	// 		exit(EXIT_FAILURE);
+	// 	}
+	if (!get_infile(data, tmp, data->cmd_lst->prev) && \
+		data->cmd_lst->prev->input_fd != -1)
+		return (false);
+	// if(read(data->cmd_lst->prev->input_fd, buff, 10) < 0)
+	// 	{
+	// 		printf("data.cmd.input_fd = %d\n", data->cmd_lst->prev->input_fd);
+	// 		perror("read");
+	// 		exit(EXIT_FAILURE);
+	// 	}
+	if (!get_outfile(tmp, data->cmd_lst->prev, data) && data->cmd_lst->prev->output_fd \
+		!= -1)
+		return (false);	
+	data->cmd_lst->prev->commands = get_param(data, tmp);
+	if (data->cmd_lst->prev->input_fd == -1)
+	{
+		data->cmd_lst->prev->output_fd = -1;
+		return (true);
+	}
+	if (data->cmd_lst->prev->output_fd == -1)
+	{
+		if (data->cmd_lst->prev->input_fd >= 0)
+			close (data->cmd_lst->prev->input_fd);
+		data->cmd_lst->prev->input_fd = -1;
+		return (true);
+	}
 	if (!data->cmd_lst->prev->commands)
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
 	return (true);
@@ -31,7 +44,7 @@ static bool	fill_cmd(t_data *data, t_token *tmp)
 
 static bool	norm(t_data *data, t_token *tmp)
 {
-	if (!append_cmd(&data->cmd_lst, -2, -2, NULL))
+	if (!append_cmd(&data->cmd_lst, -2, -2, -2, NULL))
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
 	if (!fill_cmd(data, tmp))
 	{

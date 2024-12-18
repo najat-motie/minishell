@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_utils1.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 16:21:35 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:21:36 by nmotie-          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../minishell.h"
 
 char *get_pwd()
@@ -58,13 +46,11 @@ void    change_dir(t_data *data)
         change_to_home(data);
 }
 
-void    print_args(t_data data, char **commands, int i)
+void    print_args(char **commands, int i)
 {
     while(commands[i] != NULL)
     {
-        if(there_dollar(commands[i]))
-            expand_dollar(data, commands[i]);
-        else
+
             printf("%s", commands[i]);
         i++;
         if(commands[i])
@@ -72,7 +58,7 @@ void    print_args(t_data data, char **commands, int i)
     }
 }
 
-void    echo_printing(t_data data, char **commands)
+void    echo_printing(char **commands)
 {
     int i;
     int j;
@@ -93,7 +79,7 @@ void    echo_printing(t_data data, char **commands)
             else
                 i--;
         }
-        print_args(data, commands, i);
+        print_args(commands, i);
     }
     if(newline)
         printf("\n");
