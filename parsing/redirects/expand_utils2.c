@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils2.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/19 22:33:31 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/19 22:33:32 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 char	*get_keyname(char *heredoc_input, int *removed_count, int *i)
@@ -45,7 +57,9 @@ void	init_vars(int *i, int *j, int *n)
 
 void	replace_key_by_value(char *array, int *j, char **values, int *n)
 {
-	int m = 0;
+	int	m;
+
+	m = 0;
 	while (values[*n] && values[*n][m])
 		array[(*j)++] = values[*n][m++];
 }

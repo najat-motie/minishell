@@ -12,11 +12,11 @@
 
 #include "libft.h"
 
-static char *fill_string(char *s1, char *s2, char *new_s)
+static char	*fill_string(char *s1, char *s2, char *new_s)
 {
 	int	i;
 	int	j;
-	
+
 	i = 0;
 	while (s1[i])
 	{
@@ -46,5 +46,5 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (NULL);
 	}
 	new_s = fill_string(s1, s2, new_s);
-	return(new_s);
+	return (new_s);
 }

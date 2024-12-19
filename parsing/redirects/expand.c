@@ -1,10 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/19 22:33:21 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/19 22:33:22 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-char **fill_values(t_data data, char *heredoc_input, char **values, int *removed_count)
+char	**fill_values(t_data data, char *heredoc_input, char **values,
+		int *removed_count)
 {
-	int		i = 0;
-	int		j = 0;
+	int		i;
+	int		j;
 	char	*to_expand;
+
+	i = 0;
+	j = 0;
 	while (heredoc_input[i])
 	{
 		if (heredoc_input[i] == '$')
@@ -20,14 +36,14 @@ char **fill_values(t_data data, char *heredoc_input, char **values, int *removed
 		i++;
 	}
 	values[j] = NULL;
-	return(values);
+	return (values);
 }
 
 char	**extract_values(t_data data, char *heredoc_input, int *removed_count)
 {
 	int		dollar;
 	char	**values;
-	char **values_;
+	char	**values_;
 
 	dollar = dollar_count(heredoc_input);
 	values = malloc((dollar + 1) * sizeof(char *));
@@ -37,14 +53,14 @@ char	**extract_values(t_data data, char *heredoc_input, int *removed_count)
 		return (NULL);
 	}
 	values_ = fill_values(data, heredoc_input, values, removed_count);
-	return(values_);
+	return (values_);
 }
 
 char	*fill_input(char *heredoc_input, char **values, char *array)
 {
-	int		i;
-	int		j;
-	int		n;
+	int	i;
+	int	j;
+	int	n;
 
 	init_vars(&i, &j, &n);
 	while (heredoc_input[i])
@@ -71,7 +87,7 @@ char	*fill_input(char *heredoc_input, char **values, char *array)
 char	*expand_input(t_data data, char *heredoc_input)
 {
 	char	*input;
-	char *array;
+	char	*array;
 	int		removed_count;
 	int		len;
 	char	**values;

@@ -1,27 +1,27 @@
 #include "../../minishell.h"
 
-int	free_list(t_env **list)
-{
-	t_env	*tmp;
-	t_env	*current;
+// int	free_list(t_env **list)
+// {
+// 	t_env	*tmp;
+// 	t_env	*current;
 
-	if (!(*list))
-		return (0);
-	current = *list;
-	while (current->next != *list)
-	{
-		tmp = current;
-		current = current->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
-	}
-	free(current->key);
-	free(current->value);
-	free(current);
-	*list = NULL;
-	return (0);
-}
+// 	if (!(*list))
+// 		return (0);
+// 	current = *list;
+// 	while (current->next != *list)
+// 	{
+// 		tmp = current;
+// 		current = current->next;
+// 		free(tmp->key);
+// 		free(tmp->value);
+// 		free(tmp);
+// 	}
+// 	free(current->key);
+// 	free(current->value);
+// 	free(current);
+// 	*list = NULL;
+// 	return (0);
+// }
 
 // static int	list_new_elem_str(t_env **new, char *elem)
 // {

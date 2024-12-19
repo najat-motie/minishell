@@ -2,25 +2,12 @@
 
 static bool	fill_cmd(t_data *data, t_token *tmp)
 {
-	// char buff[100];
 	if (!get_here_doc(data, tmp, data->cmd_lst->prev) && \
 		data->cmd_lst->prev->here_doc != -1)
 		return (false);
-	// if(read(data->cmd_lst->here_doc, buff, 10) < 0)
-	// 	{
-	// 		printf("data.cmd.here_doc = %d\n", data->cmd_lst->here_doc);
-	// 		perror("read");
-	// 		exit(EXIT_FAILURE);
-	// 	}
 	if (!get_infile(data, tmp, data->cmd_lst->prev) && \
 		data->cmd_lst->prev->input_fd != -1)
 		return (false);
-	// if(read(data->cmd_lst->prev->input_fd, buff, 10) < 0)
-	// 	{
-	// 		printf("data.cmd.input_fd = %d\n", data->cmd_lst->prev->input_fd);
-	// 		perror("read");
-	// 		exit(EXIT_FAILURE);
-	// 	}
 	if (!get_outfile(tmp, data->cmd_lst->prev, data) && data->cmd_lst->prev->output_fd \
 		!= -1)
 		return (false);	

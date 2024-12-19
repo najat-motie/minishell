@@ -1,40 +1,55 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   built_in1.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 16:21:25 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/19 20:19:27 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-void    handle_pwd(t_data *data)
+void	handle_pwd(t_data *data)
 {
-    char *pwd = get_pwd();
-    if(pwd)
-    {
-        printf("%s\n", pwd);
-        data->exit_status = 0;
-    }
-    else
-        data->exit_status = 1;
+	char	*pwd;
+
+	pwd = get_pwd();
+	if (pwd)
+	{
+		printf("%s\n", pwd);
+		free(pwd);
+		data->exit_status = 0;
+	}
+	else
+		data->exit_status = 1;
 }
 
-void    handle_echo(t_data *data, char **commands)
+void	handle_echo(t_data *data, char **commands)
 {
-    if(ft_strcmp(commands[0], "echo") == 0)
-    {
-        echo_printing(commands);
-        data->exit_status = 0;
-    }
+	if (ft_strcmp(commands[0], "echo") == 0)
+	{
+		print_args(commands);
+		data->exit_status = 0;
+	}
 }
 
-void handle_cd(t_data *data)
+void	handle_cd(t_data *data)
 {
-    update_old_pwd(data);
-    change_dir(data);
-    update_new_pwd(data);
+	update_old_pwd(data);
+	change_dir(data);
+	update_new_pwd(data);
 }
 
-void    handle_exit(char **commands)
+void	handle_exit(char **commands)
 {
-    if(commands[1] == NULL)
-    {
-        printf("exit\n");
-        exit(EXIT_SUCCESS);
-    }
-    else
-        get_status(commands);
+	if (commands[1] == NULL)
+	{
+		printf("exit\n");
+		exit(EXIT_SUCCESS);
+	}
+	else
+		get_status(commands);
 }

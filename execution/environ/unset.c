@@ -1,0 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 16:22:05 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/19 23:56:43 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+void	remove_from_lst(t_data *data, char *key)
+{
+	t_env	*tmp;
+	t_env	*env_lst;
+
+	env_lst = data->env_lst;
+	while (env_lst && env_lst->next)
+	{
+		if (ft_strcmp(env_lst->next->key, key) == 0)
+		{
+			tmp = env_lst->next;
+			env_lst->next = tmp->next;
+			free(tmp);
+			tmp = NULL;
+			return ;
+		}
+		env_lst = env_lst->next;
+	}
+}
+
+void	unset_variables(t_data *data, char **key)
+{
+	int	i;
+
+	i = 1;
+	while (key[i])
+	{
+		if (!not_valid(key[i]))
+			remove_from_lst(data, key[i]);
+		i++;
+	}
+}

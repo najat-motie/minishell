@@ -1,49 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 16:22:15 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/19 22:04:03 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-void	clear_ressources(int *pid, t_fd *fd, int *i)
+void	execute_command(t_data *data, t_cmd *tmp, t_fd *fd, int i)
 {
-	if (fd->prev_fd != -2)
-		close(fd->prev_fd);
-	close(fd->read_pipe);
-	close(fd->write_pipe);
-	perror("fork");
-	while(*i - 1 >= 0)
-	{
-		kill(pid[*i], SIGKILL);
-		(*i)--;
-	}
-}
+	char	*path;
 
-void    execute_command(t_data *data, t_fd fd_, char **commands, int i)
-{
-    char *path;
-
-	if (!is_builtin(commands[0]))
+	if (!is_builtin(tmp->commands[0]))
 	{
-		path = get_path(*data, commands[0]);
-		check_path(path, commands[0]);
+		path = get_path(*data, tmp->commands[0]);
+		check_path(path, tmp->commands[0]);
 	}
-	set_input_and_output(*data, fd_);
-	// printf("data->cmd->inputfd-->%d\n", data->cmd_lst->input_fd);
-	set_read_write_pipe(*data, fd_, i);
-	if (is_builtin(commands[0]))
+	set_input_and_output(tmp, fd);
+	set_read_write_pipe(*data, tmp, fd, i);
+	if (is_builtin(tmp->commands[0]))
 	{
-		handle_builtins(data, commands);
+		handle_builtins(data, tmp->commands);
 		exit(EXIT_SUCCESS);
 	}
 	else
 	{
-		execve(path, commands, NULL);
+		execve(path, tmp->commands, NULL);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
 }
-		
-void	handle_child(t_data *data, t_cmd *tmp, t_fd fd_, int i)
+
+void	handle_child(t_data *data, t_cmd *tmp, t_fd *fd, int i)
 {
-	if(signal(SIGQUIT, SIG_DFL) == SIG_ERR)
+	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
 	{
-        perror("signal");
+		perror("signal");
 		exit(EXIT_FAILURE);
 	}
 	if (signal(SIGINT, SIG_DFL) == SIG_ERR)
@@ -53,62 +50,61 @@ void	handle_child(t_data *data, t_cmd *tmp, t_fd fd_, int i)
 	}
 	if (tmp->input_fd == -1 || tmp->output_fd == -1)
 		exit(EXIT_FAILURE);
-	execute_command(data, fd_, tmp->commands, i);
-
+	execute_command(data, tmp, fd, i);
 }
 
 void	handle_childs(t_data *data, t_fd *fd)
 {
 	int		i;
-	int		pid[data->cmd_nb];
+	int		*pids;
 	t_cmd	*tmp;
 
 	i = 0;
 	tmp = data->cmd_lst;
+	pids = malloc(data->cmd_nb * sizeof(int));
 	while (1)
 	{
-		if(!create_pipe(data, fd, i))
-			return ;	
-		if ((pid[i] = fork()) == 0)
-			handle_child(data, tmp, *fd, i);
-		else if (pid[i] == -1)
+		if (!create_pipe(data, fd, i))
+			return ;
+		pids[i] = fork();
+		if (pids[i] == 0)
+			handle_child(data, tmp, fd, i);
+		else if (pids[i] == -1)
 		{
-			clear_ressources(pid, fd, &i);
+			clear_ressources(pids, fd, &i);
 			return ;
 		}
 		else
 			save_read_of_pipe(*data, fd, i);
-		i++;
-		tmp = tmp->next;
-		if(tmp == data->cmd_lst)
-			break;
+		if (!move_to_next_cmd(*data, &tmp, &i))
+			break ;
 	}
-	wait_pids(data, pid);
+	wait_pids(data, pids);
 }
 
 void	excute_commands(t_data *data)
 {
-	t_fd fd;
-	
+	t_fd	fd;
+
 	fd.prev_fd = -1;
-	if(signal(SIGQUIT, sigquit_child) == SIG_ERR)
+	if (signal(SIGQUIT, handle_sigquit_in_child) == SIG_ERR)
 	{
-        perror("signal");
+		perror("signal");
 		return ;
 	}
-	if (signal(SIGINT, sigint_child) == SIG_ERR)
+	if (signal(SIGINT, sigint_parent_change_behavior_in_child) == SIG_ERR)
 	{
 		perror("signal");
 		return ;
 	}
 	handle_childs(data, &fd);
-	if (signal(SIGINT, sigint_parent) == SIG_ERR)
+	if (signal(SIGINT, handle_sigint) == SIG_ERR)
 	{
 		perror("signal");
 		return ;
 	}
-	if(signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-    {
+	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+	{
 		perror("signal");
 		return ;
 	}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 16:22:19 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/14 16:33:47 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 char	*check_current_working_directory(char *command)
@@ -12,6 +24,7 @@ char	*check_current_working_directory(char *command)
 		return (NULL);
 	}
 	path = ft_strjoin(ft_strjoin(pwd, "/"), command);
+	free(pwd);
 	if (access(path, X_OK) == 0)
 		return (path);
 	else
@@ -22,9 +35,9 @@ char	*check_current_working_directory(char *command)
 	}
 }
 
-char *search_path(char *path, char *command)
+char	*search_path(char *path, char *command)
 {
-	int i;
+	int		i;
 	char	*full_path;
 	char	**all_paths;
 
@@ -41,13 +54,13 @@ char *search_path(char *path, char *command)
 		}
 		i++;
 	}
-	return(NULL);
+	return (NULL);
 }
 
 char	*get_path_of_command(t_data data, char *command)
 {
 	char	*path;
-	char *get_path;
+	char	*get_path;
 
 	path = retreive_value(data, "PATH");
 	if (path == NULL)
@@ -58,10 +71,10 @@ char	*get_path_of_command(t_data data, char *command)
 		return (NULL);
 	}
 	get_path = search_path(path, command);
-		if(get_path)
-			return(get_path);
-		else
-			return ("not valid command");
+	if (get_path)
+		return (get_path);
+	else
+		return ("not valid command");
 }
 
 char	*get_path(t_data data, char *command)

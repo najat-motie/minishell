@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-static int	open_file(t_data *data, char *filename, int type,int *quote)
+static int	open_file(t_data *data, char *filename, int type,int quote)
 {
 	int	fd;
 
@@ -8,7 +8,7 @@ static int	open_file(t_data *data, char *filename, int type,int *quote)
 	if (type == INPUT)
 		fd = open(filename, O_RDONLY, 0644);
 	else if (type == HEREDOC)
-		fd = handle_heredoc(data, filename,quote);
+		fd = handle_heredoc(data, filename, quote);
 	else if (type == TRUNC)
 		fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else if (type == APPEND)
@@ -21,12 +21,11 @@ static bool	get_here(t_data *data, t_token *tmp, t_cmd *cmd)
 {
 	if (tmp->type == HEREDOC)
 	{
-		// printf("cmd->here_doc = %d\n",cmd->here_doc);
 		if (cmd->here_doc >= 0)
 			close(cmd->here_doc);
 		if (tmp == tmp->next || tmp->next->type <= 5 || tmp->next == data->token)
 			return (print_error_token(tmp, data));
-		cmd->here_doc = open_file(data, tmp->next->str, HEREDOC,&tmp->next->quote);
+		cmd->here_doc = open_file(data, tmp->next->str, HEREDOC, tmp->next->quote);
 		if (cmd->here_doc == -1)
 			return (false);
 	}
@@ -59,7 +58,7 @@ static bool	get_in(t_data *data, t_token *tmp, t_cmd *cmd)
 			close(cmd->input_fd);
 		if (tmp == tmp->next || tmp->next->type <= 5 || tmp->next == data->token)
 			return (print_error_token(tmp, data));
-		cmd->input_fd = open_file(data, tmp->next->str, INPUT,&tmp->next->quote);
+		cmd->input_fd = open_file(data, tmp->next->str, INPUT, tmp->next->quote);
 		if (cmd->input_fd == -1)
 			return (false);
 	}
@@ -77,12 +76,12 @@ bool	get_infile(t_data *data, t_token *token, t_cmd *cmd)
 	t_token	*tmp;
 
 	tmp = token;
-	if (tmp->type != PIPE && !get_in(data, tmp, cmd))
+	if (tmp->type != PIPE && !get_in(data, tmp, cmd) && !g_signal_received)
 		return (false);
 	if (tmp->type == PIPE)
 		return (true);
 	tmp = tmp->next;
-	while (tmp->type != PIPE && tmp != data->token)
+	while (tmp->type != PIPE && tmp != data->token && !g_signal_received)
 	{
 		if (!get_in(data, tmp, cmd))
 			return (false);
@@ -99,7 +98,7 @@ static bool	get_out(t_token *tmp, t_cmd *cmd, t_data *data)
 			close(cmd->output_fd);
 		if (tmp == tmp->next || tmp->next->type <= 5 || tmp->next == data->token)
 			return (print_error_token(tmp, data));
-		cmd->output_fd = open_file(data, tmp->next->str, TRUNC,&tmp->next->quote);
+		cmd->output_fd = open_file(data, tmp->next->str, TRUNC, tmp->next->quote);
 		if (cmd->output_fd == -1)
 			return (false);
 	}
@@ -109,7 +108,7 @@ static bool	get_out(t_token *tmp, t_cmd *cmd, t_data *data)
 			close(cmd->output_fd);
 		if (tmp == tmp->next || tmp->next->type <= 5 || tmp->next == data->token)
 			return (print_error_token(tmp, data));
-		cmd->output_fd = open_file(data, tmp->next->str, APPEND,&tmp->next->quote);
+		cmd->output_fd = open_file(data, tmp->next->str, APPEND, tmp->next->quote);
 		if (cmd->output_fd == -1)
 			return (false);
 	}
@@ -121,10 +120,10 @@ bool	get_outfile(t_token *token, t_cmd *cmd, t_data *data)
 	t_token	*tmp;
 
 	tmp = token;
-	if (tmp->type != PIPE && !get_out(tmp, cmd, data) && !signal_received)
+	if (tmp->type != PIPE && !get_out(tmp, cmd, data) && !g_signal_received)
 		return (false);
 	tmp = tmp->next;
-	while (tmp != data->token && tmp->type != PIPE && !signal_received)
+	while (tmp != data->token && tmp->type != PIPE && !g_signal_received)
 	{
 		if (!get_out(tmp, cmd, data))
 			return (false);

@@ -1,89 +1,117 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/19 22:33:26 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/19 22:35:30 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-int before_start()
+int	there_dollar(char *str)
 {
-    int in = dup(0);
-    if(in == -1)
-    {
-        perror("dup");
-        return(-1);
-    }
-    if(signal(SIGINT, sigint_heredoc) == SIG_ERR)
-    {
-        perror("signal");
-        return(-1);
-    }
-    return(in);
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-void    write_to_file(int fd, char *input)
+int	before_start(void)
 {
-    write(fd, input, ft_strlen(input));
-    write(fd, "\n", 1);
+	int	in;
+
+	in = dup(0);
+	if (in == -1)
+	{
+		perror("dup");
+		return (-1);
+	}
+	if (signal(SIGINT, sigint_parent_change_behavior_in_heredoc) == SIG_ERR)
+	{
+		perror("signal");
+		return (-1);
+	}
+	return (in);
 }
 
-void    read_input(t_data *data, int *fd, char *delimeter,int quote)
+void	read_input(t_data *data, int *fd, char *delimeter, int quote)
 {
-    char *input;
+	char	*input;
+	char	*expanded;
 
-    // int fd_1 = open("tst",O_CREAT | O_RDWR,0777);
-    while(1)
-    {
-        input = readline("> ");
+	while (1)
+	{
+		input = readline("> ");
 		if (!input)
 			break ;
-        if (!ft_strcmp(delimeter, input))
+		if (!ft_strcmp(delimeter, input))
 			break ;
-        if(!quote)
-            input = expand_input(*data, input);
-        // write_to_file(fd_1, input);
-        write_to_file(fd[1], input);
-        free(input);
-    }
+		if (!quote && there_dollar(input))
+		{
+			expanded = expand_input(*data, input);
+			ft_putendl_fd(expanded, fd[1]);
+			free(expanded);
+		}
+		else
+		{
+			ft_putendl_fd(input, fd[1]);
+			free(input);
+		}
+	}
+	free(input);
 }
 
-int    set_exit_status(t_data *data, int in)
+int	set_exit_status(t_data *data, int in)
 {
-    if(signal_received)
-    {
-        data->exit_status = 1;
-        if(dup2(in, 0) == -1)
-        {
-            perror("dup2");
-            return(-1);
-        }
-        close(in);
-    }
-    else
-    {
-        data->exit_status = 0;
-        close(in);
-    }
-    return(1);
+	if (g_signal_received)
+	{
+		data->exit_status = 1;
+		if (dup2(in, 0) == -1)
+		{
+			perror("dup2");
+			return (-1);
+		}
+		close(in);
+	}
+	else
+	{
+		data->exit_status = 0;
+		close(in);
+	}
+	return (1);
 }
 
-int    handle_heredoc(t_data *data, char *delimeter, int *quote)
+int	handle_heredoc(t_data *data, char *delimeter, int quote)
 {
-    int in;
-    int fd[2];
+	int	in;
+	int	fd[2];
 
-    in = before_start();
-    // printf("in = %d\n", in);
-    if(in == -1)
-        return(-1);
-    if(pipe(fd) == -1)
-    {
-        perror("pipe");
-        return(-1);
-    }
-    read_input(data, fd, delimeter, *quote);
-    if(set_exit_status(data, in) == -1)
-        return(-1);
-    if(signal(SIGINT, sigint_parent_without_newline) == SIG_ERR)
-    {
-        perror("signal");
-        return(-1);
-    }
-    close(fd[1]);
-    return(fd[0]);
+	in = before_start();
+	if (in == -1)
+		return (-1);
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		return (-1);
+	}
+	read_input(data, fd, delimeter, quote);
+	if (set_exit_status(data, in) == -1)
+		return (-1);
+	if (signal(SIGINT, handle_sigint_without_newline) == SIG_ERR)
+	{
+		perror("signal");
+		return (-1);
+	}
+	close(fd[1]);
+	return (fd[0]);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils1.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/19 22:33:34 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/19 22:34:57 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 int	dollar_count(char *heredoc_input)
@@ -11,7 +23,7 @@ int	dollar_count(char *heredoc_input)
 	{
 		if (heredoc_input[i] == '$' && ((heredoc_input[i + 1] >= 'a'
 					&& heredoc_input[i + 1] <= 'z') || (heredoc_input[i
-					+ 1] >= 'A' && heredoc_input[i + 1] <= 'Z')
+						+ 1] >= 'A' && heredoc_input[i + 1] <= 'Z')
 				|| (heredoc_input[i + 1] == '_')))
 			count++;
 		i++;
@@ -19,19 +31,22 @@ int	dollar_count(char *heredoc_input)
 	return (count);
 }
 
-int valid_dollar(char *heredoc_input, int *i)
+int	valid_dollar(char *heredoc_input, int *i)
 {
 	if ((heredoc_input[*i + 1] >= 'a' && heredoc_input[*i + 1] <= 'z')
 		|| (heredoc_input[*i + 1] >= 'A' && heredoc_input[*i + 1] <= 'Z')
 		|| (heredoc_input[*i + 1] == '_'))
-		return(1);
-	return(0);
+		return (1);
+	return (0);
 }
 
 int	key_len(char *heredoc_input, int *i)
 {
-	int len = 0;
-	int j = *i;
+	int	len;
+	int	j;
+
+	len = 0;
+	j = *i;
 	while ((heredoc_input[j] >= 'a' && heredoc_input[j] <= 'z')
 		|| (heredoc_input[j] >= 'A' && heredoc_input[j] <= 'Z')
 		|| (heredoc_input[j] >= '0' && heredoc_input[j] <= '9')

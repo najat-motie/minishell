@@ -1,53 +1,66 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   built_in2.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/14 16:21:29 by nmotie-           #+#    #+#             */
+/*   Updated: 2024/12/14 16:21:32 by nmotie-          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-void    print_env(t_data *data)
+void	print_env(t_data *data)
 {
-    t_env *tmp_lst = data->env_lst;
-    
-	while(tmp_lst)
+	t_env	*tmp_lst;
+
+	tmp_lst = data->env_lst;
+	while (tmp_lst)
 	{
 		printf("%s", tmp_lst->key);
-        // printf("-->here\n");
-        if(tmp_lst->value)
-		    printf("=%s\n", tmp_lst->value);
-        else
-            printf("\n");
+		if (tmp_lst->value)
+			printf("=%s\n", tmp_lst->value);
+		else
+			printf("\n");
 		tmp_lst = tmp_lst->next;
-    }
-    data->exit_status = 0;
+	}
+	data->exit_status = 0;
 }
 
-void    print_export(t_data *data)
+void	print_export(t_data *data)
 {
-   t_env *tmp_lst = data->env_lst;
+	t_env	*tmp_lst;
 
-	while(tmp_lst)
+	tmp_lst = data->env_lst;
+	while (tmp_lst)
 	{
 		printf("declare -x ");
 		printf("%s", tmp_lst->key);
-        if(tmp_lst->equal)
-        {
-            printf("=\"");
-            if(tmp_lst->value != NULL)
-                printf("%s", tmp_lst->value);
-            printf("\"");
-        }
-        printf("\n");
-        tmp_lst = tmp_lst->next;
-    }
-    data->exit_status = 0;
+		if (tmp_lst->equal)
+		{
+			printf("=\"");
+			if (tmp_lst->value != NULL)
+				printf("%s", tmp_lst->value);
+			printf("\"");
+		}
+		printf("\n");
+		tmp_lst = tmp_lst->next;
+	}
+	data->exit_status = 0;
 }
 
-void    handle_export(t_data *data, char **commands)
+void	handle_export(t_data *data, char **commands)
 {
-    export_variables(data, commands);
-    data->exit_status = 0;
-    check_not_valid_variables(data, commands);
+	export_variables(data, commands);
+	data->exit_status = 0;
+	check_not_valid_variables(data, commands);
 }
 
-void    handle_unset(t_data *data, char **commands)
+void	handle_unset(t_data *data, char **commands)
 {
-    unset_variables(data, commands);
-    data->exit_status = 0;
-    check_not_valid_variables(data, commands);
+	unset_variables(data, commands);
+	data->exit_status = 0;
+	check_not_valid_variables(data, commands);
 }

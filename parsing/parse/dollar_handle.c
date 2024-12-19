@@ -1,43 +1,5 @@
 #include "../../minishell.h"
 
-// void	quoting(bool *dq,bool *sq, char c)
-// {
-// 	if (c == '\'')
-// 	{
-// 		if (!*sq)
-// 			*sq = true;
-// 		else
-// 			*sq = false;
-// 	}
-// 	else if(c == '"')
-// 	{
-// 		if (!*dq)
-// 			*dq = true;
-// 		else
-// 			*dq = false;
-// 	}
-// }
-// void	quoting(bool *sq, char c)
-// {
-// 	if (c == '\'' && !*sq)
-// 		*sq = true;
-// 	else if (c == '\'' && *sq)
-// 		*sq = false;
-// }
-// void	quoting(bool *sq,char c)
-// {
-// 	if (c == '\'' && !*sq)
-// 		*sq = true;
-// 	else if (c == '\'' && *sq)
-// 		*sq = false;
-// }
-// void	quoting(bool *sq, char c)
-// {
-// 	if (c == '\'' && !*sq)
-// 		*sq = true;
-// 	else if (c == '\'' && *sq)
-// 		*sq = false;
-// }
 void	quoting(bool *dq, bool *sq, char c)
 {
 	if ((c == '\'' || c == '"') && !*sq && !*dq)
@@ -173,8 +135,8 @@ int	replace_dollar(char **line, t_data *data)
 			return (0);
 
 	}
-	free(*line);
+	// free(*line);
 	*line = str;
-	printf("line = %s\n", *line);
+	// printf("line = %s\n", *line);
 	return (1);
 }
