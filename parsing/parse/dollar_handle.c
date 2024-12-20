@@ -8,8 +8,6 @@ void	quoting(bool *dq, bool *sq, char c)
 			*sq = true;
 		else if (c == '"' && !*sq)
 			*dq = true; //1
-		// if (index)
-		// 	++(*index);
 	}
 	else if ((c == '\'' || c == '"'))
 	{
@@ -17,8 +15,6 @@ void	quoting(bool *dq, bool *sq, char c)
 			*sq = false;
 		else if (c == '"' && !*sq && *dq)
 			*dq = false;
-		// if (index)
-		// 	++(*index);
 	}
 }
 
@@ -33,7 +29,6 @@ static int	in_env(t_data *data, char *line, int size, char **str)
 	if (key)
 		free(key);
 	tmp = ft_strjoin(*str, value);
-	// printf("tmp = %s\n", tmp);
 	if (value)
 		free(value);
 	free(*str);
@@ -69,10 +64,7 @@ int	add_dollar(char *line, int *index, char **str, t_data *data)
 	quoting(&data->dq, &data->sq,line[*index]);
 	n = *index;
 
-	// printf("line[*index]_0 = %c\n", line[*index]);
 	ctrl = exist_in_env(line, index, data);
-	// printf("line[*index]_1 = %c\n", line[*index]);
-	// printf("*index - n = %d\n", *index - n);
 	if (ctrl == 1)
 		return (in_env(data, &line[n], *index - n - 1 , str));
 	else if (ctrl == 2)

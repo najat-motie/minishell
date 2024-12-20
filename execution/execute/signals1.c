@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:22:22 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 22:18:26 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/20 13:56:17 by ner-roui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_sigint(int signum)
 {
 	(void)signum;
 	g_signal_received = 1;
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_redisplay();
@@ -36,7 +36,7 @@ void	handle_sigint_without_newline(int signum)
 {
 	(void)signum;
 	g_signal_received = 1;
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
