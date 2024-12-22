@@ -2,16 +2,12 @@
 
 void	quoting_choice(bool *dq, bool *sq, int *index, char c)
 {
-	// if (c == '\'' && !*sq1)
-	// 	*sq1 = true;
-	// else if (c == '\'' && *sq1)
-	// 	*sq1 = false;
 	if ((c == '\'' || c == '"') && !*sq && !*dq)
 	{
 		if (c == '\'' && !*dq)
 			*sq = true;
 		else if (c == '"' && !*sq)
-			*dq = true; //1
+			*dq = true; 
 		if (index)
 			++(*index);
 	}

@@ -63,7 +63,6 @@ int	add_dollar(char *line, int *index, char **str, t_data *data)
 
 	quoting(&data->dq, &data->sq,line[*index]);
 	n = *index;
-
 	ctrl = exist_in_env(line, index, data);
 	if (ctrl == 1)
 		return (in_env(data, &line[n], *index - n - 1 , str));
@@ -108,27 +107,23 @@ int	replace_dollar(char **line, t_data *data)
 {
 	int		i;
 	char	*str;
-	// bool	sq1 = false;
 	i = 0;
 	data->sq = false;
 	data->dq = false;
 	str = ft_strdup("");
 	while ((*line)[i])
 	{
-		// quoting(&data->dq, &data->sq,(*line)[i]);
-		// quoting(&sq1, (*line)[i]);
-		// printf("str = %s | sq = %d  | dq = %d\n ", str,data->sq,data->dq);
 		if ((*line)[i] && (*line)[i + 1] && (*line)[i] == '$' && \
 			((*line)[i + 1] != '\'' && (*line)[i + 1] != '"') && \
 			(ft_isalpha((*line)[i + 1]) || (*line)[i + 1] == '?' || \
 			(*line)[i + 1] == '_') && !data->sq && !add_dollar((*line), &i, &str, data))
 			return (0);
+		if( (*line)[i] == '$' && ((*line)[i + 1] == '\'' || (*line)[i + 1] == '"'))
+			i++;
 		if ((*line)[i] && !add_char(&(*line)[i], &str, data, &i))
 			return (0);
 
 	}
-	// free(*line);
 	*line = str;
-	// printf("line = %s\n", *line);
 	return (1);
 }

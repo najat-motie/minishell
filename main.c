@@ -3,67 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:06:58 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/20 00:09:29 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/22 17:43:53 by ner-roui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void	print_token(t_token *token)
-// {
-// 	t_token	*tmp;
-
-// 	tmp = token;
-// 	while (tmp->next != token)
-// 	{
-// 		printf("Type : %d, [%s]\n", tmp->type, tmp->str);
-// 		tmp = tmp->next;
-// 	}
-// 	printf("Type : %d, [%s]\n",  tmp->type, tmp->str);
-// }
-
-// void	print_tab(char **tab)
-// {
-// 	int	i;
-
-// 	if (!(tab))
-// 	{
-// 		printf("NULL");
-// 		return ;
-// 	}
-// 	i = 0;
-// 	printf("[");
-// 	while (tab[i])
-// 	{
-// 		printf("%s", tab[i]);
-// 		if (tab[i + 1])
-// 			printf(", ");
-// 		i++;
-// 	}
-// 	printf("]");
-// }
-
-// void	print_cmd(t_cmd *cmd)
-// {
-// 	t_cmd	*tmp;
-
-// 	tmp = cmd;
-// 	while (tmp->next != cmd)
-// 	{
-// 		printf("Skip -> %d, infile -> %d, outfile -> %d, cmd : ",
-// 		tmp->skip_cmd, tmp->input_fd, tmp->output_fd);
-// 		print_tab(tmp->commands);
-// 		printf("\n");
-// 		tmp = tmp->next;
-// 	}
-// 	printf("Skip -> %d, infile -> %d, outfile -> %d, cmd : ", tmp->skip_cmd,
-// 		 tmp->input_fd, tmp->output_fd);
-// 	print_tab(tmp->commands);
-// 	printf("\n");
-// }
 
 void	handle_line(t_data *data, char *line)
 {
@@ -113,6 +60,7 @@ int	main(int argc, char **argv, char **envp)
 		handle_line(&data, line);
 	}
 	free(line);
+
 	clear_env(&data.env_lst);
 	return (0);
 }

@@ -46,4 +46,5 @@ bool	parseline(t_data *data, char *line)
 	}
     // print_cmd(data->cmd_lst);
 	return (check_pipe(data));
+	system("leaks minishell");
 }

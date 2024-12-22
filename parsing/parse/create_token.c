@@ -107,11 +107,11 @@ static bool	add_special(t_token **begin, char **command)
 
 bool	create_list_token(t_token **begin, char *command)
 {
-	if(!*command || !command) 
-	{
-		append_token(begin, ft_strdup(""), ARG);
-		return (true);
-	}
+	// if(!*command || !command) 
+	// {
+	// 	append_token(begin, ft_strdup(""), ARG);
+	// 	return (true);
+	// }
 	(*begin) = NULL;
 	while (*command)
 	{
