@@ -1,6 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_cmd.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 15:47:53 by ner-roui          #+#    #+#             */
+/*   Updated: 2024/12/23 15:54:52 by ner-roui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../../minishell.h"
 
-static int	cmd_new_elem(t_cmd **new, int input_fd, int output_fd,int here_doc, char **commands)
+static int	cmd_new_elem(t_cmd **new, int input_fd, int output_fd, \
+char **commands)
 {
 	(*new) = malloc(sizeof(t_cmd));
 	if (*new == NULL)
@@ -8,18 +22,18 @@ static int	cmd_new_elem(t_cmd **new, int input_fd, int output_fd,int here_doc, c
 	(*new)->skip_cmd = false;
 	(*new)->input_fd = input_fd;
 	(*new)->output_fd = output_fd;
-	(*new)->here_doc = here_doc;
+	(*new)->here_doc = -2;
 	(*new)->commands = commands;
 	(*new)->next = NULL;
 	(*new)->prev = NULL;
 	return (1);
 }
 
-int	append_cmd(t_cmd **list, int input_fd, int output_fd,int here_doc, char **commands)
+int	append_cmd(t_cmd **list, int input_fd, int output_fd, char **commands)
 {
 	t_cmd	*new;
 
-	if (!cmd_new_elem(&new, input_fd, output_fd, here_doc, commands))
+	if (!cmd_new_elem(&new, input_fd, output_fd, commands))
 		return (0);
 	if (!(*list))
 	{

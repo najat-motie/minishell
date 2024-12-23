@@ -1,4 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_quote.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 01:50:56 by ner-roui          #+#    #+#             */
+/*   Updated: 2024/12/23 15:20:24 by ner-roui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
+
+void	quoting(bool *dq, bool *sq, char c)
+{
+	if ((c == '\'' || c == '"') && !*sq && !*dq)
+	{
+		if (c == '\'' && !*dq)
+			*sq = true;
+		else if (c == '"' && !*sq)
+			*dq = true;
+	}
+	else if ((c == '\'' || c == '"'))
+	{
+		if (c == '\'' && !*dq && *sq)
+			*sq = false;
+		else if (c == '"' && !*sq && *dq)
+			*dq = false;
+	}
+}
 
 void	quoting_choice(bool *dq, bool *sq, int *index, char c)
 {

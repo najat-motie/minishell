@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_cmd_fd.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 02:09:03 by ner-roui          #+#    #+#             */
+/*   Updated: 2024/12/23 16:00:15 by ner-roui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-static int	open_file(t_data *data, char *filename, int type,int quote)
+int	open_file(t_data *data, char *filename, int type, int quote)
 {
 	int	fd;
 
@@ -17,48 +29,18 @@ static int	open_file(t_data *data, char *filename, int type,int quote)
 		perror(filename);
 	return (fd);
 }
-static bool	get_here(t_data *data, t_token *tmp, t_cmd *cmd)
-{
-	if (tmp->type == HEREDOC)
-	{
-		if (cmd->here_doc >= 0)
-			close(cmd->here_doc);
-		if (tmp == tmp->next || tmp->next->type <= 5 || tmp->next == data->token)
-			return (print_error_token(tmp, data));
-		cmd->here_doc = open_file(data, tmp->next->str, HEREDOC, tmp->next->quote);
-		if (cmd->here_doc == -1)
-			return (false);
-	}
-	return (true);
-}
 
-bool	get_here_doc(t_data *data, t_token *token, t_cmd *cmd)
-{
-	t_token	*tmp;
-
-	tmp = token;
-	if (tmp->type != PIPE && !get_here(data, tmp, cmd))
-		return (false);
-	if (tmp->type == PIPE)
-		return (true);
-	tmp = tmp->next;
-	while (tmp->type != PIPE && tmp != data->token)
-	{
-		if (!get_here(data, tmp, cmd))
-			return (false);
-		tmp = tmp->next;
-	}
-	return (true);
-}
 static bool	get_in(t_data *data, t_token *tmp, t_cmd *cmd)
 {
 	if (tmp->type == INPUT)
 	{
 		if (cmd->input_fd >= 0)
 			close(cmd->input_fd);
-		if (tmp == tmp->next || tmp->next->type <= 5 || tmp->next == data->token)
+		if (tmp == tmp->next || tmp->next->type <= 5 || \
+		tmp->next == data->token)
 			return (print_error_token(tmp, data));
-		cmd->input_fd = open_file(data, tmp->next->str, INPUT, tmp->next->quote);
+		cmd->input_fd = open_file(data, tmp->next->str, INPUT \
+		, tmp->next->quote);
 		if (cmd->input_fd == -1)
 			return (false);
 	}
@@ -96,9 +78,11 @@ static bool	get_out(t_token *tmp, t_cmd *cmd, t_data *data)
 	{
 		if (cmd->output_fd >= 0)
 			close(cmd->output_fd);
-		if (tmp == tmp->next || tmp->next->type <= 5 || tmp->next == data->token)
+		if (tmp == tmp->next || tmp->next->type <= 5 || \
+		tmp->next == data->token)
 			return (print_error_token(tmp, data));
-		cmd->output_fd = open_file(data, tmp->next->str, TRUNC, tmp->next->quote);
+		cmd->output_fd = open_file(data, tmp->next->str, TRUNC \
+		, tmp->next->quote);
 		if (cmd->output_fd == -1)
 			return (false);
 	}
@@ -106,9 +90,11 @@ static bool	get_out(t_token *tmp, t_cmd *cmd, t_data *data)
 	{
 		if (cmd->output_fd >= 0)
 			close(cmd->output_fd);
-		if (tmp == tmp->next || tmp->next->type <= 5 || tmp->next == data->token)
+		if (tmp == tmp->next || tmp->next->type <= 5 || \
+		tmp->next == data->token)
 			return (print_error_token(tmp, data));
-		cmd->output_fd = open_file(data, tmp->next->str, APPEND, tmp->next->quote);
+		cmd->output_fd = open_file(data, tmp->next->str, APPEND \
+		, tmp->next->quote);
 		if (cmd->output_fd == -1)
 			return (false);
 	}

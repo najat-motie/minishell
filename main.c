@@ -6,7 +6,7 @@
 /*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:06:58 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/22 17:43:53 by ner-roui         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:57:35 by ner-roui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	handle_line(t_data *data, char *line)
 {
 	add_history(line);
-	// printf("--->%p\n", &line);
 	free(line);
 	data->cmd_nb = commands_numbr(*data);
 	if (data->cmd_nb == 1 && builtin_only(data->cmd_lst->commands)
@@ -35,7 +34,7 @@ void	handle_line(t_data *data, char *line)
 	// system("leaks minishell");
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv,__unused char **envp)
 {
 	t_data	data;
 	char	*line;

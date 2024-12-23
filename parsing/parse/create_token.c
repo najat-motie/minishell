@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_token.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 01:56:16 by ner-roui          #+#    #+#             */
+/*   Updated: 2024/12/23 15:28:37 by ner-roui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 static int	length_cmd(char *command, int *quotes)
@@ -107,11 +119,6 @@ static bool	add_special(t_token **begin, char **command)
 
 bool	create_list_token(t_token **begin, char *command)
 {
-	// if(!*command || !command) 
-	// {
-	// 	append_token(begin, ft_strdup(""), ARG);
-	// 	return (true);
-	// }
 	(*begin) = NULL;
 	while (*command)
 	{

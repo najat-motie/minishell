@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 14:48:38 by ner-roui          #+#    #+#             */
+/*   Updated: 2024/12/23 16:02:51 by ner-roui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 void	free_array(char **arr)
@@ -37,8 +49,6 @@ void	free_all(t_data *data, char *err, int ext)
 		free_cmd(&data->cmd_lst);
 	if (data->token)
 		free_token(&data->token);
-	// if (data->env_lst)
-	// 	free_list(&data->env_lst);
 	if (err)
 		print_error(err);
 	if (ext != -1)

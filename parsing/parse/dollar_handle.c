@@ -1,22 +1,16 @@
-#include "../../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dollar_handle.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 02:09:38 by ner-roui          #+#    #+#             */
+/*   Updated: 2024/12/23 16:05:12 by ner-roui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	quoting(bool *dq, bool *sq, char c)
-{
-	if ((c == '\'' || c == '"') && !*sq && !*dq)
-	{
-		if (c == '\'' && !*dq)
-			*sq = true;
-		else if (c == '"' && !*sq)
-			*dq = true; //1
-	}
-	else if ((c == '\'' || c == '"'))
-	{
-		if (c == '\'' && !*dq && *sq)
-			*sq = false;
-		else if (c == '"' && !*sq && *dq)
-			*dq = false;
-	}
-}
+#include "../../minishell.h"
 
 static int	in_env(t_data *data, char *line, int size, char **str)
 {
@@ -44,7 +38,6 @@ static int	dollar_point_interrogation(t_data *data, char **str)
 	char	*tmp2;
 
 	tmp = ft_itoa(data->exit_status);
-	printf("exit status = %s\n", tmp);
 	if (!tmp)
 		return (0);
 	tmp2 = ft_strjoin(*str, tmp);
@@ -61,11 +54,11 @@ int	add_dollar(char *line, int *index, char **str, t_data *data)
 	int		ctrl;
 	int		n;
 
-	quoting(&data->dq, &data->sq,line[*index]);
+	quoting(&data->dq, &data->sq, line[*index]);
 	n = *index;
 	ctrl = exist_in_env(line, index, data);
 	if (ctrl == 1)
-		return (in_env(data, &line[n], *index - n - 1 , str));
+		return (in_env(data, &line[n], *index - n - 1, str));
 	else if (ctrl == 2)
 	{
 		(*index) += 2;
@@ -87,7 +80,6 @@ int	add_char(char *c, char **str, t_data *data, int *index)
 	char	*tmp2;
 	int		i;
 
-	// printf("c = %c\n", *c);
 	quoting(&data->dq, &data->sq, *c);
 	i = 0;
 	if (c[i] == '$' && !data->sq && exist_in_env(c, &i, data))
@@ -100,30 +92,5 @@ int	add_char(char *c, char **str, t_data *data, int *index)
 	if (!tmp2)
 		return (0);
 	*str = tmp2;
-	return (1);
-}
-
-int	replace_dollar(char **line, t_data *data)
-{
-	int		i;
-	char	*str;
-	i = 0;
-	data->sq = false;
-	data->dq = false;
-	str = ft_strdup("");
-	while ((*line)[i])
-	{
-		if ((*line)[i] && (*line)[i + 1] && (*line)[i] == '$' && \
-			((*line)[i + 1] != '\'' && (*line)[i + 1] != '"') && \
-			(ft_isalpha((*line)[i + 1]) || (*line)[i + 1] == '?' || \
-			(*line)[i + 1] == '_') && !data->sq && !add_dollar((*line), &i, &str, data))
-			return (0);
-		if( (*line)[i] == '$' && ((*line)[i + 1] == '\'' || (*line)[i + 1] == '"'))
-			i++;
-		if ((*line)[i] && !add_char(&(*line)[i], &str, data, &i))
-			return (0);
-
-	}
-	*line = str;
 	return (1);
 }

@@ -1,4 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_line.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 15:34:55 by ner-roui          #+#    #+#             */
+/*   Updated: 2024/12/23 15:35:58 by ner-roui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../../minishell.h"
+
+bool is_true_lst_cmd(t_data *data)
+{
+	if (!data->token || !create_list_cmd(data))
+	{
+		free_token(&data->token);
+		free_cmd(&data->cmd_lst);
+		return (false);
+	}
+	return (true);
+}
 
 bool	empty_line(char *line)
 {
@@ -17,20 +41,21 @@ bool	empty_line(char *line)
 
 bool	parseline(t_data *data, char *line)
 {
+	char *str;
+
 	if (open_quote(data, line))
 	{
-		// free(line);
+		free(line);
 		return (false);
 	}
-	if (!replace_dollar(&line, data) || !create_list_token(&data->token, line))
+	str = replace_dollar(&line, data);
+	if (!str || !create_list_token(&data->token, str))
 	{
 		printf("Error: malloc failed\n");
-		// free(line);
+		free(str);
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
 	}
-	// free(line);
-    // printf("line = %s\n",line);
-	// print_token(data->token);
+	free(str);
 	if (data->token && data->token->prev->type == PIPE)
 	{
 		write(2, "Error: Unclosed pipe\n", 21);
@@ -38,13 +63,7 @@ bool	parseline(t_data *data, char *line)
 		free_token(&data->token);
 		return (false);
 	}
-	if (!data->token || !create_list_cmd(data))
-	{
-		free_token(&data->token);
-		free_cmd(&data->cmd_lst);
+	if(!is_true_lst_cmd(data))
 		return (false);
-	}
-    // print_cmd(data->cmd_lst);
 	return (check_pipe(data));
-	system("leaks minishell");
 }

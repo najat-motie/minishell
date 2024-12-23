@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit_env.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/23 14:48:03 by ner-roui          #+#    #+#             */
+/*   Updated: 2024/12/23 16:05:32 by ner-roui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 static int	ft_search(char *str, char c)
@@ -23,7 +35,6 @@ static int	end_word(char *str, char *env_lst)
 	return (0);
 }
 
-/* return 1 si $VAR dans env_lst sinon 0 */
 int	exist_in_env(char *line, int *i, t_data *data)
 {
 	t_env	*tmp;
@@ -32,7 +43,6 @@ int	exist_in_env(char *line, int *i, t_data *data)
 	if (line[*i + 1] == '?' || line[*i + 1] == '$')
 		return (2);
 	tmp = data->env_lst;
-	// printf("--->%s\n", tmp->key);
 	len = len_list(tmp);
 	while (len--)
 	{
@@ -79,17 +89,14 @@ char	*get_dollar_word(char *line, int size)
 	char	*dollar;
 	int		i;
 
-	// printf("size = %d\n", size);
 	dollar = malloc(sizeof(char) * (size + 1));
 	if (!dollar)
 		return (NULL);
 	i = 0;
 	while (line[i++] && i <= size)
 	{
-		// printf("dollar[%d] = %c\n", i , line[i]);
 		dollar[i - 1] = line[i];
 	}
-
 	dollar[i - 1] = '\0';
 	return (dollar);
 }

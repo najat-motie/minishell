@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:08:52 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 22:44:36 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/23 15:55:47 by ner-roui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,9 @@ typedef struct s_data
 
 /* main */
 void				init_data(t_data *data);
-
+int	open_file(t_data *data, char *filename, int type, int quote);
+bool is_true_lst_cmd(t_data *data);
+void	quoting(bool *dq, bool *sq, char c);
 int					handle_heredoc(t_data *data, char *delimeter, int quote);
 /* List utils */
 int					free_list(t_env **list);
@@ -108,7 +110,7 @@ char				*get_dollar_word(char *line, int size);
 int					add_dollar(char *line, int *index, char **str,
 						t_data *data);
 int					add_char(char *c, char **str, t_data *data, int *index);
-int					replace_dollar(char **line, t_data *data);
+char					*replace_dollar(char **line, t_data *data);
 
 //create_token.c
 bool				create_list_token(t_token **begin, char *command);
@@ -129,8 +131,8 @@ void				free_all(t_data *data, char *err, int ext);
 bool				print_error_token(t_token *token, t_data *data);
 
 //list_cmd.c
-int					append_cmd(t_cmd **list, int infile, int outfile,
-						int here_doc, char **cmd_param);
+int					append_cmd(t_cmd **list, int infile, int outfile, \
+char **cmd_param);
 void				free_cmd(t_cmd **list);
 size_t				len_cmd(t_cmd *list);
 bool				empty_line(char *line);
