@@ -6,14 +6,13 @@
 /*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 15:34:55 by ner-roui          #+#    #+#             */
-/*   Updated: 2024/12/23 15:35:58 by ner-roui         ###   ########.fr       */
+/*   Updated: 2024/12/23 16:51:53 by ner-roui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../minishell.h"
 
-bool is_true_lst_cmd(t_data *data)
+bool	is_true_lst_cmd(t_data *data)
 {
 	if (!data->token || !create_list_cmd(data))
 	{
@@ -41,7 +40,7 @@ bool	empty_line(char *line)
 
 bool	parseline(t_data *data, char *line)
 {
-	char *str;
+	char	*str;
 
 	if (open_quote(data, line))
 	{
@@ -63,7 +62,7 @@ bool	parseline(t_data *data, char *line)
 		free_token(&data->token);
 		return (false);
 	}
-	if(!is_true_lst_cmd(data))
+	if (!is_true_lst_cmd(data))
 		return (false);
 	return (check_pipe(data));
 }

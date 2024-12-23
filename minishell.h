@@ -6,7 +6,7 @@
 /*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:08:52 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/23 15:55:47 by ner-roui         ###   ########.fr       */
+/*   Updated: 2024/12/23 16:54:07 by ner-roui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,10 @@ typedef struct s_data
 
 /* main */
 void				init_data(t_data *data);
-int	open_file(t_data *data, char *filename, int type, int quote);
-bool is_true_lst_cmd(t_data *data);
-void	quoting(bool *dq, bool *sq, char c);
+int					open_file(t_data *data, char *filename, int type, \
+int quote);
+bool				is_true_lst_cmd(t_data *data);
+void				quoting(bool *dq, bool *sq, char c);
 int					handle_heredoc(t_data *data, char *delimeter, int quote);
 /* List utils */
 int					free_list(t_env **list);
@@ -110,7 +111,7 @@ char				*get_dollar_word(char *line, int size);
 int					add_dollar(char *line, int *index, char **str,
 						t_data *data);
 int					add_char(char *c, char **str, t_data *data, int *index);
-char					*replace_dollar(char **line, t_data *data);
+char				*replace_dollar(char **line, t_data *data);
 
 //create_token.c
 bool				create_list_token(t_token **begin, char *command);
