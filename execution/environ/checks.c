@@ -6,11 +6,20 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:21:51 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 20:49:59 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 17:30:34 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	print_errors(char **commands, int *i)
+{
+	write(2, "minishell: ", 11);
+	write(2, commands[0], ft_strlen(commands[0])); 
+	write(2, ": `", 3);
+	write(2, commands[*i], ft_strlen(commands[*i]));
+	write(2, "': not a valid identifier\n", 26);
+}
 
 int	check_other_characters(char *command)
 {
@@ -49,14 +58,12 @@ void	check_not_valid_variables(t_data *data, char **commands)
 			&& (commands[i][0] < 'A' || commands[i][0] > 'Z')
 			&& commands[i][0] != '_')
 		{
-			printf("minishell: %s: `%s': not a valid identifier\n", commands[0],
-				commands[i]);
+			print_errors(commands, &i);
 			data->exit_status = 1;
 		}
 		else if (check_other_characters(commands[i]))
 		{
-			printf("minishell: %s: `%s': not a valid identifier\n", commands[0],
-				commands[i]);
+			print_errors(commands, &i);
 			data->exit_status = 1;
 		}
 		i++;

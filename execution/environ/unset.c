@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:22:05 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 23:56:43 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 12:15:49 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ void	remove_from_lst(t_data *data, char *key)
 		{
 			tmp = env_lst->next;
 			env_lst->next = tmp->next;
+			free(tmp->key);
+			free(tmp->value);
+			free(tmp->str);
 			free(tmp);
 			tmp = NULL;
 			return ;

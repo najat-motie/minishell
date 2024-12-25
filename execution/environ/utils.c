@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:22:08 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 12:05:58 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 14:36:15 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	ft_free(char **s)
 		i++;
 	}
 	free(s);
+	s = NULL;
 }
 
 int	there_equal(char *command)

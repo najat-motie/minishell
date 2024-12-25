@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:06:58 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/23 15:57:35 by ner-roui         ###   ########.fr       */
+/*   Updated: 2024/12/25 15:20:50 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,9 @@ void	handle_line(t_data *data, char *line)
 		excute_commands(data);
 	free_cmd(&data->cmd_lst);
 	free_token(&data->token);
-	// system("leaks minishell");
 }
 
-int	main(int argc, char **argv,__unused char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 	char	*line;
@@ -42,10 +41,10 @@ int	main(int argc, char **argv,__unused char **envp)
 
 	(void)argc;
 	(void)argv;
-	prompt = "minishell> ";
 	catch_signals();
 	init_data(&data);
 	make_env(&data, envp);
+	prompt = "minishell> ";
 	while (1)
 	{
 		g_signal_received = 0;
@@ -59,7 +58,6 @@ int	main(int argc, char **argv,__unused char **envp)
 		handle_line(&data, line);
 	}
 	free(line);
-
 	clear_env(&data.env_lst);
 	return (0);
 }

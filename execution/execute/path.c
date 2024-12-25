@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:22:19 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:33:47 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 21:08:51 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,20 @@ char	*get_path_of_command(t_data data, char *command)
 
 char	*get_path(t_data data, char *command)
 {
+	struct stat	check_stat;
+
 	if (!command)
 		return (NULL);
-	if (ft_strchr(command, '/') != NULL || ft_strchr(command, '.') != NULL)
+	if (ft_strchr(command, '/') != NULL || (command[0] == '.'
+			&& command[1] == '/'))
 	{
-		if (access(command, X_OK) == 0)
+		stat(command, &check_stat);
+		if (S_ISDIR(check_stat.st_mode))
+			return ("it's a directory");
+		else if (access(command, X_OK) == 0)
 			return (command);
+		else if (access(command, F_OK) == 0)
+			return ("don't have execute permission");
 		else
 		{
 			perror(command);
@@ -96,9 +104,25 @@ char	*get_path(t_data data, char *command)
 
 void	check_path(char *path, char *command)
 {
-	if (ft_strcmp(path, "not valid command") == 0)
+	if (ft_strcmp(path, "don't have execute permission") == 0)
 	{
-		printf("minishell: %s: command not found\n", command);
+		write(2, "minishell: ", 11);
+		write(2, command, ft_strlen(command));
+		write(2, ": Permission denied\n", 20);
+		exit(126);
+	}
+	else if (ft_strcmp(path, "it's a directory") == 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, command, ft_strlen(command));
+		write(2, ": is a directory\n", 17);
+		exit(126);
+	}
+	else if (ft_strcmp(path, "not valid command") == 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, command, ft_strlen(command));
+		write(2, ": command not found\n", 20);
 		exit(127);
 	}
 	else if (!path && command)

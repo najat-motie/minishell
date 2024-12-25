@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:33:26 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 22:35:30 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 13:49:57 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	before_start(void)
 		perror("dup");
 		return (-1);
 	}
-	if (signal(SIGINT, sigint_parent_change_behavior_in_heredoc) == SIG_ERR)
+	if (signal(SIGINT, handle_sigint_parent_in_heredoc) == SIG_ERR)
 	{
 		perror("signal");
 		return (-1);
@@ -59,6 +59,7 @@ void	read_input(t_data *data, int *fd, char *delimeter, int quote)
 		if (!quote && there_dollar(input))
 		{
 			expanded = expand_input(*data, input);
+			free(input);
 			ft_putendl_fd(expanded, fd[1]);
 			free(expanded);
 		}
@@ -107,7 +108,7 @@ int	handle_heredoc(t_data *data, char *delimeter, int quote)
 	read_input(data, fd, delimeter, quote);
 	if (set_exit_status(data, in) == -1)
 		return (-1);
-	if (signal(SIGINT, handle_sigint_without_newline) == SIG_ERR)
+	if (signal(SIGINT, handle_sigint_parent_without_newline) == SIG_ERR)
 	{
 		perror("signal");
 		return (-1);

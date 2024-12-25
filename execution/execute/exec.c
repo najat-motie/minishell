@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:22:15 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 22:04:03 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 10:58:34 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,18 +87,18 @@ void	excute_commands(t_data *data)
 	t_fd	fd;
 
 	fd.prev_fd = -1;
-	if (signal(SIGQUIT, handle_sigquit_in_child) == SIG_ERR)
+	if (signal(SIGQUIT, change_behavior_sigquit_parent_in_child) == SIG_ERR)
 	{
 		perror("signal");
 		return ;
 	}
-	if (signal(SIGINT, sigint_parent_change_behavior_in_child) == SIG_ERR)
+	if (signal(SIGINT, ignore_sigint_parent_in_child) == SIG_ERR)
 	{
 		perror("signal");
 		return ;
 	}
 	handle_childs(data, &fd);
-	if (signal(SIGINT, handle_sigint) == SIG_ERR)
+	if (signal(SIGINT, handle_sigint_parent) == SIG_ERR)
 	{
 		perror("signal");
 		return ;

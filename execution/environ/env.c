@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:21:54 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 20:53:28 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 12:36:25 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	make_env(t_data *data, char **envp)
 				ft_strdup(envp[i])));
 		i++;
 	}
+	free(key);
+	free(value);
 }
 
 void	clear_env(t_env **lst)

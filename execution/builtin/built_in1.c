@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:21:25 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 20:19:27 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 17:40:27 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	handle_cd(t_data *data)
 	update_new_pwd(data);
 }
 
-void	handle_exit(char **commands)
+void	handle_exit(t_data *data, char **commands)
 {
 	if (commands[1] == NULL)
 	{
@@ -51,5 +51,5 @@ void	handle_exit(char **commands)
 		exit(EXIT_SUCCESS);
 	}
 	else
-		get_status(commands);
+		get_status(data, commands);
 }

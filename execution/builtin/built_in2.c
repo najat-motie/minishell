@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:21:29 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/14 16:21:32 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 11:51:32 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ void	print_env(t_data *data)
 	tmp_lst = data->env_lst;
 	while (tmp_lst)
 	{
-		printf("%s", tmp_lst->key);
-		if (tmp_lst->value)
-			printf("=%s\n", tmp_lst->value);
-		else
+		if (tmp_lst->equal)
+		{
+			printf("%s=", tmp_lst->key);
+			if (tmp_lst->value)
+				printf("%s", tmp_lst->value);
 			printf("\n");
+		}
 		tmp_lst = tmp_lst->next;
 	}
 	data->exit_status = 0;

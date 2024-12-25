@@ -6,7 +6,7 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:21:44 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 20:49:15 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 17:40:42 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	handle_builtins(t_data *data, char **commands)
 	if (commands[0] != NULL)
 	{
 		if (ft_strcmp(commands[0], "exit") == 0)
-			handle_exit(commands);
+			handle_exit(data, commands);
 		if (ft_strcmp(commands[0], "cd") == 0)
 			handle_cd(data);
 		if (ft_strcmp(commands[0], "export") == 0 && commands[1] != NULL)

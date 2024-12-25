@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ner-roui <ner-roui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:33:21 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/23 14:49:52 by ner-roui         ###   ########.fr       */
+/*   Updated: 2024/12/24 15:12:13 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ char	**fill_values(t_data data, char *heredoc_input, char **values,
 				i++;
 				(*removed_count)++;
 				to_expand = get_keyname(heredoc_input, removed_count, &i);
-				values[j++] = retreive_value(data, to_expand);
+				values[j++] = ft_strdup(retreive_value(data, to_expand));
+				free(to_expand);
 			}
 		}
 		i++;
@@ -41,19 +42,18 @@ char	**fill_values(t_data data, char *heredoc_input, char **values,
 
 char	**extract_values(t_data data, char *heredoc_input, int *removed_count)
 {
-	int		dollar;
+	int		dollar_nb;
 	char	**values;
-	char	**values_;
 
-	dollar = dollar_count(heredoc_input);
-	values = malloc((dollar + 1) * sizeof(char *));
+	dollar_nb = dollar_count(heredoc_input);
+	values = malloc((dollar_nb + 1) * sizeof(char *));
 	if (values == NULL)
 	{
 		perror("malloc");
 		return (NULL);
 	}
-	values_ = fill_values(data, heredoc_input, values, removed_count);
-	return (values_);
+	values = fill_values(data, heredoc_input, values, removed_count);
+	return (values);
 }
 
 char	*fill_input(char *heredoc_input, char **values, char *array)
@@ -77,7 +77,7 @@ char	*fill_input(char *heredoc_input, char **values, char *array)
 				n++;
 			}
 			else
-				array[j++] = heredoc_input[i];
+				array[j++] = heredoc_input[i++];
 		}
 	}
 	array[j] = '\0';
@@ -86,21 +86,22 @@ char	*fill_input(char *heredoc_input, char **values, char *array)
 
 char	*expand_input(t_data data, char *heredoc_input)
 {
-	char	*input;
-	char	*array;
+	char	*new_input;
 	int		removed_count;
-	int		len;
+	int		len_values;
 	char	**values;
 
 	removed_count = 0;
 	values = extract_values(data, heredoc_input, &removed_count);
-	len = values_len(values);
-	array = malloc(ft_strlen(heredoc_input) - removed_count + len + 1);
-	if (!array)
+	len_values = values_len(values);
+	new_input = malloc(ft_strlen(heredoc_input) - removed_count + len_values
+			+ 1);
+	if (!new_input)
 	{
 		perror("malloc");
 		return (NULL);
 	}
-	input = fill_input(heredoc_input, values, array);
-	return (input);
+	new_input = fill_input(heredoc_input, values, new_input);
+	ft_free(values);
+	return (new_input);
 }

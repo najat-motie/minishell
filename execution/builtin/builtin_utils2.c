@@ -6,11 +6,19 @@
 /*   By: nmotie- <nmotie-@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 16:21:38 by nmotie-           #+#    #+#             */
-/*   Updated: 2024/12/19 23:49:30 by nmotie-          ###   ########.fr       */
+/*   Updated: 2024/12/24 17:38:48 by nmotie-          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	exit_err(char *command)
+{
+	write(2, "exit\nminishell: exit: ", 22);
+	write(2, command, ft_strlen(command));
+	write(2, ": numeric argument required\n", 28);
+	exit(255);
+}
 
 int	builtin_only(char **commands)
 {
@@ -30,7 +38,7 @@ int	is_nemuric(char *command)
 	int	i;
 
 	i = 0;
-	if (command[0] == '-')
+	if (command[0] == '-' || command[0] == '+')
 		i++;
 	while (command[i])
 	{
@@ -41,7 +49,7 @@ int	is_nemuric(char *command)
 	return (1);
 }
 
-void	get_status(char **commands)
+void	get_status(t_data *data, char **commands)
 {
 	if (is_nemuric(commands[1]))
 	{
@@ -59,12 +67,11 @@ void	get_status(char **commands)
 			}
 		}
 		else
-			printf("exit\nminishell: exit: too many arguments\n");
+		{
+			write(2, "exit\nminishell: exit: too many arguments\n", 41);
+			data->exit_status = 1;
+		}
 	}
 	else
-	{
-		printf("exit\nminishell: exit: %s: numeric argument required\n",
-			commands[1]);
-		exit(255);
-	}
+		exit_err(commands[1]);
 }
